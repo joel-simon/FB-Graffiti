@@ -23,6 +23,26 @@ if (cluster.isMaster) {
 	var bodyParser = require('body-parser');
 	app.use(bodyParser({limit: '50mb'})); //
 
+	app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://facebook.com');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+	});
+
+
 	function getImage(path, cb) {
 		var params = {
 			Bucket: 'facebookGraffiti',
@@ -69,7 +89,10 @@ if (cluster.isMaster) {
 			  } else {
 			  	var end = new Date().getTime();
 					var time = end - start;
-			  	console.log("Successfully uploaded \n\t URL:", path, "\n\tIn: ", time);   
+					var date = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
+				  date = date.substring(0,date.search("GMT")-1);
+			  	console.log("Successfully uploaded \n\t URL:", path, "\n\tIn: ", time);  
+			  	console.log('\t'+date);
 			  }
 		  });
 		});
