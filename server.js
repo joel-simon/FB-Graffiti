@@ -17,7 +17,6 @@ if (cluster.isMaster) {
     console.log('worker ' + worker.process.pid + ' died');
   });
 } else {
-	server();
 	var express = require('express');
 	var app = express();
 	var bodyParser = require('body-parser');
