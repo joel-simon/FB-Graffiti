@@ -10,7 +10,6 @@ var http = require('http');
 var numCPUs = require('os').cpus().length;
 
 if (cluster.isMaster) {
-  // Fork workers.
   for (var i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -18,27 +17,17 @@ if (cluster.isMaster) {
     console.log('worker ' + worker.process.pid + ' died');
   });
 } else {
+	server();
 	var express = require('express');
 	var app = express();
 	var bodyParser = require('body-parser');
 	app.use(bodyParser({limit: '50mb'})); //
 
 	app.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'https://facebook.com');
-
-    // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-
-    // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
     next();
 	});
 
@@ -53,7 +42,7 @@ if (cluster.isMaster) {
 
 	app.post('/setImage', function(req, res) {
 		
-		var path = req.body.path;
+		var path = req.body.path+'.png';
 		var img = req.body.img;
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
 		var delta = images(new Buffer(data, 'base64'));
@@ -70,12 +59,21 @@ if (cluster.isMaster) {
 			} else { // append the changes
 				console.log('Appending to old image');
 				var oldImg = images(data.Body);
-				if (delta.height() > oldImg.height()) { // need to englarge image.
-					console.log('need to expand image');
-					newImage = images(delta.width(), delta.height()).draw(oldImg,0,0).draw(delta,0,0).encode("png");
+				var oldWidth = oldImg.width();
+				var oldheight = oldImg.height();
+				var dWidth = delta.width();
+				var dHeight = delta.height();
+				
+				if (dHeight > oldheight && dWidth == oldWidth) { // need to englarge image.
+					console.log('Need to vertically increase old image');
+					newImage = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png");
+				} else if (dHeight > oldheight && dWidth > oldWidth) {
+					console.log('Need to scale new image');
+					newImage = oldImg.draw(delta.size(oldWidth, oldheight),0,0).encode("png");
 				} else {
 					newImage = oldImg.draw(delta,0,0).encode("png");
 				}
+
 			}
 			var params = {
 				Bucket: 'facebookGraffiti',
@@ -97,7 +95,5 @@ if (cluster.isMaster) {
 		  });
 		});
 	});
-
 	app.listen(3000);
-
 }
