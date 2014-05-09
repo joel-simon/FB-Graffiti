@@ -39,6 +39,10 @@ if (cluster.isMaster) {
 		s3.getObject(params, cb);
 	}
 
+	app.get('/test', function(req,res) {
+		res.send('Hello World');
+	});
+
 	app.post('/setImage', function(req, res) {
 		
 		var path = req.body.path+'.png';
