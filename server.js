@@ -20,7 +20,7 @@ if (cluster.isMaster) {
 	var express = require('express');
 	var app = express();
 	var bodyParser = require('body-parser');
-	app.use(bodyParser({limit: '50mb'})); //
+	app.use(bodyParser({limit: '50mb'}));
 
 	app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'https://facebook.com');
@@ -43,6 +43,7 @@ if (cluster.isMaster) {
 		
 		var path = req.body.path+'.png';
 		var img = req.body.img;
+		var imgUrl = req.imgUrl;
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
 		var delta = images(new Buffer(data, 'base64'));
 		var start = new Date().getTime();
@@ -89,6 +90,7 @@ if (cluster.isMaster) {
 					var date = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
 				  date = date.substring(0,date.search("GMT")-1);
 			  	console.log("Successfully uploaded \n\t URL:", path, "\n\tIn: ", time);  
+			  	console.log('\t'+imgUrl);
 			  	console.log('\t'+date);
 			  }
 		  });
