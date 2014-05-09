@@ -70,7 +70,7 @@ if (cluster.isMaster) {
 				if (dHeight > oldheight && dWidth == oldWidth) { // need to englarge image.
 					console.log('Need to vertically increase old image');
 					newImage = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png");
-				} else if (dHeight > oldheight && dWidth > oldWidth) {
+				} else if (dHeight != oldheight || dWidth != oldWidth) {
 					console.log('Need to scale new image');
 					newImage = oldImg.draw(delta.size(oldWidth, oldheight),0,0).encode("png");
 				} else {
