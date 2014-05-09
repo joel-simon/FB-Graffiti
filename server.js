@@ -43,11 +43,10 @@ if (cluster.isMaster) {
 		
 		var path = req.body.path+'.png';
 		var img = req.body.img;
-		var imgUrl = req.imgUrl;
+		var imgUrl = req.body.imgUrl;
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
 		var delta = images(new Buffer(data, 'base64'));
 		var start = new Date().getTime();
-		res.send('hello world');
 		getImage(path, function(err, data) {
 
 			var newImage;
@@ -84,7 +83,9 @@ if (cluster.isMaster) {
 			s3.putObject(params, function(err, data) {
 			  if (err) {
 				  console.log(err);
+				  res.send(404);
 			  } else {
+			  	res.send('Upload success');
 			  	var end = new Date().getTime();
 					var time = end - start;
 					var date = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
