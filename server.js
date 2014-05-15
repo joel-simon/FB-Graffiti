@@ -7,7 +7,7 @@ var images = require ('images');
 AWS.config.loadFromPath('./config.json');
 var cluster = require('cluster');
 var http = require('http');
-var numCPUs = 1;//require('os').cpus().length;
+var numCPUs = require('os').cpus().length;
 
 
 
@@ -76,18 +76,18 @@ if (cluster.isMaster) {
 				// console.log('Appending to old image');
 				var oldImg = images(data.Body);
 				var oldWidth = oldImg.width();
-				var oldheight = oldImg.height();
+				var oldHeight = oldImg.height();
 				var dWidth = delta.width();
 				var dHeight = delta.height();
 				var width = oldWidth;
-				var height = oldWidth;
-				if (dHeight > oldheight && dWidth == oldWidth) { // need to englarge image.
+				var height = oldHeight;
+				if (dHeight > oldHeight && dWidth == oldWidth) { // need to englarge image.
 					// console.log('Need to vertically increase old image');
 					newImage = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png");
 					height = dHeight;
-				} else if (dHeight != oldheight || dWidth != oldWidth) {
+				} else if (dHeight != oldHeight || dWidth != oldWidth) {
 					// console.log('Need to scale new image');
-					newImage = oldImg.draw(delta.size(oldWidth, oldheight),0,0).encode("png");
+					newImage = oldImg.draw(delta.size(oldWidth, oldHeight),0,0).encode("png");
 				} else {
 					newImage = oldImg.draw(delta,0,0).encode("png");
 				}
