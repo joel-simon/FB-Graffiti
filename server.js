@@ -67,11 +67,14 @@ if (cluster.isMaster) {
 		getImage(path, function(err, data) {
 
 			var newImage;
+			var width;
+			var height;
 			// this post has not been drawn on before.
 			if (err) {
 				// console.log('New image');
 				newImage = (delta).encode("png");
-
+				width = newImage.width();
+				height = newImage.height();
 			} else { // append the changes
 				// console.log('Appending to old image');
 				var oldImg = images(data.Body);
@@ -79,8 +82,8 @@ if (cluster.isMaster) {
 				var oldHeight = oldImg.height();
 				var dWidth = delta.width();
 				var dHeight = delta.height();
-				var width = oldWidth;
-				var height = oldHeight;
+				width = oldWidth;
+				height = oldHeight;
 				if (dHeight > oldHeight && dWidth == oldWidth) { // need to englarge image.
 					// console.log('Need to vertically increase old image');
 					newImage = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png");
