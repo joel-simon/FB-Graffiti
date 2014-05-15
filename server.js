@@ -7,7 +7,9 @@ var images = require ('images');
 AWS.config.loadFromPath('./config.json');
 var cluster = require('cluster');
 var http = require('http');
-var numCPUs = require('os').cpus().length;
+var numCPUs = 1;//require('os').cpus().length;
+
+
 
 if (cluster.isMaster) {
   for (var i = 0; i < numCPUs; i++) {
@@ -21,6 +23,17 @@ if (cluster.isMaster) {
 	var app = express();
 	var bodyParser = require('body-parser');
 	app.use(bodyParser({limit: '50mb'}));
+
+	var pg = require('pg'); 
+	var pg_client = new pg.Client(process.env.db_string);
+
+	pg_client.connect(function(err) {
+	  if(err) {
+	    return console.error('could not connect to postgres', err);
+	  } else {
+	  	console.log('Established a pg connection.');
+	  }
+	});
 
 	app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'https://facebook.com');
@@ -56,22 +69,24 @@ if (cluster.isMaster) {
 			var newImage;
 			// this post has not been drawn on before.
 			if (err) {
-				console.log('New image');
+				// console.log('New image');
 				newImage = (delta).encode("png");
 
 			} else { // append the changes
-				console.log('Appending to old image');
+				// console.log('Appending to old image');
 				var oldImg = images(data.Body);
 				var oldWidth = oldImg.width();
 				var oldheight = oldImg.height();
 				var dWidth = delta.width();
 				var dHeight = delta.height();
-				
+				var width = oldWidth;
+				var height = oldWidth;
 				if (dHeight > oldheight && dWidth == oldWidth) { // need to englarge image.
-					console.log('Need to vertically increase old image');
+					// console.log('Need to vertically increase old image');
 					newImage = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png");
+					height = dHeight;
 				} else if (dHeight != oldheight || dWidth != oldWidth) {
-					console.log('Need to scale new image');
+					// console.log('Need to scale new image');
 					newImage = oldImg.draw(delta.size(oldWidth, oldheight),0,0).encode("png");
 				} else {
 					newImage = oldImg.draw(delta,0,0).encode("png");
@@ -83,20 +98,25 @@ if (cluster.isMaster) {
 				Key: 		path,
 				Body: 	newImage,
 				ACL: 		'public-read'
-			};
+			}
+
 			s3.putObject(params, function(err, data) {
 			  if (err) {
-				  console.log(err);
+				  console.log('Err putting:', err);
 				  res.send(404);
 			  } else {
 			  	res.send('Upload success');
 			  	var end = new Date().getTime();
 					var time = end - start;
-					var date = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
-				  date = date.substring(0,date.search("GMT")-1);
-			  	console.log("Successfully uploaded \n\t URL:", path, "\n\tIn: ", time);  
-			  	console.log('\t'+imgUrl);
-			  	console.log('\t'+date);
+
+					var query = "INSERT INTO events (time_taken, url, id, width, height) values ($1,$2,$3,$4,$5)";
+					
+				 // console.log(newImage.width(), newImage.height());
+					pg_client.query(query, [time,imgUrl, path, width, height], function(err, result) {
+						if (err) {
+							console.log('ERR:'+err);
+						}
+					});
 			  }
 		  });
 		});
