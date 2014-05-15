@@ -72,9 +72,9 @@ if (cluster.isMaster) {
 			// this post has not been drawn on before.
 			if (err) {
 				// console.log('New image');
+				width = delta.width();
+				height = delta.height();
 				newImage = (delta).encode("png");
-				width = newImage.width();
-				height = newImage.height();
 			} else { // append the changes
 				// console.log('Appending to old image');
 				var oldImg = images(data.Body);
