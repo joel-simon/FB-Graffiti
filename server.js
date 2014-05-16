@@ -73,6 +73,7 @@ if (cluster.isMaster) {
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
 		var delta = images(new Buffer(data, 'base64'));
 		var start = new Date().getTime();
+		var type; 
 		getImage(path, function(err, data) {
 
 			var newImage;
@@ -84,6 +85,7 @@ if (cluster.isMaster) {
 				width = delta.width();
 				height = delta.height();
 				newImage = (delta).encode("png");
+				type = 'new';
 			} else { // append the changes
 				// console.log('Appending to old image');
 				var oldImg = images(data.Body);
@@ -103,6 +105,7 @@ if (cluster.isMaster) {
 				} else {
 					newImage = oldImg.draw(delta,0,0).encode("png");
 				}
+				type = 'append';
 
 			}
 			var params = {
@@ -123,10 +126,10 @@ if (cluster.isMaster) {
 			  	var end = new Date().getTime();
 					var time = end - start;
 
-					var query = "INSERT INTO events (time_taken, url, id, width, height) values ($1,$2,$3,$4,$5)";
+					var query = "INSERT INTO events (time_taken, url, id, width, height, type) values ($1,$2,$3,$4,$5,$6)";
 					
 				 // console.log(newImage.width(), newImage.height());
-					pg_client.query(query, [time,imgUrl, path, width, height], function(err, result) {
+					pg_client.query(query, [time,imgUrl, path, width, height, type], function(err, result) {
 						if (err) {
 							console.log('ERR:'+err);
 						}
@@ -163,14 +166,13 @@ if (cluster.isMaster) {
 		  	var end = new Date().getTime();
 				var time = end - start;
 
-				var query = "INSERT INTO events (time_taken, url, id, width, height) values ($1,$2,$3,$4,$5)";
+				var query = "INSERT INTO events (time_taken, url, id, width, height, events) values ($1,$2,$3,$4,$5,$6)";
 				
-			 // console.log(newImage.width(), newImage.height());
-				// pg_client.query(query, [time,imgUrl, path, width, height], function(err, result) {
-				// 	if (err) {
-				// 		console.log('ERR:'+err);
-				// 	}
-				// });
+				pg_client.query(query, [time,imgUrl, path, width, height, 'share'], function(err, result) {
+					if (err) {
+						console.log('ERR:'+err);
+					}
+				});
 		  }
 	  });
 	});
