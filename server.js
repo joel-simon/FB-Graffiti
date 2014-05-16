@@ -7,7 +7,7 @@ var images = require ('images');
 AWS.config.loadFromPath('./config.json');
 var cluster = require('cluster');
 var http = require('http');
-var numCPUs = require('os').cpus().length;
+var numCPUs = 1;//require('os').cpus().length;
 
 
 
@@ -24,6 +24,9 @@ if (cluster.isMaster) {
 	var bodyParser = require('body-parser');
 	app.use(bodyParser({limit: '50mb'}));
 
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'jade');
+
 	var pg = require('pg'); 
 	var pg_client = new pg.Client(process.env.db_string);
 
@@ -36,7 +39,7 @@ if (cluster.isMaster) {
 	});
 
 	app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://facebook.com');
+    res.setHeader('Access-Control-Allow-Origin', '*');//https://facebook.com
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -54,6 +57,12 @@ if (cluster.isMaster) {
 
 	app.get('/test', function(req,res) {
 		res.send('Hello World');
+	});
+
+	app.get('/share/:src', function(req, res) {
+		var src = req.params.src;
+		res.render('share', { src:'https://s3.amazonaws.com/graffitiSnapshots/'+src});
+		console.log('https://s3.amazonaws.com/graffitiSnapshots/'+src);
 	});
 
 	app.post('/setImage', function(req, res) {
@@ -99,8 +108,9 @@ if (cluster.isMaster) {
 			var params = {
 				Bucket: 'facebookGraffiti',
 				Key: 		path,
-				Body: 	newImage,
-				ACL: 		'public-read'
+				ACL: 		'public-read',
+				Body: newImage,
+				ContentType: 'image/png'
 			}
 
 			s3.putObject(params, function(err, data) {
@@ -108,7 +118,8 @@ if (cluster.isMaster) {
 				  console.log('Err putting:', err);
 				  res.send(404);
 			  } else {
-			  	res.send('Upload success');
+			  	console.log(path);
+			  	res.send(path);
 			  	var end = new Date().getTime();
 					var time = end - start;
 
@@ -124,5 +135,57 @@ if (cluster.isMaster) {
 		  });
 		});
 	});
+
+	app.post('/shareImage', function(req, res) {
+		var path = req.body.path+'.png';
+		var img = req.body.img;
+		var imgUrl = req.body.imgUrl;
+		var data = img.replace(/^data:image\/\w+;base64,/, "");
+		var delta = images(new Buffer(data, 'base64'));
+		var start = new Date().getTime();
+
+		newImage = (delta).encode("png");	
+		var params = {
+			Bucket: 'graffitiSnapshots',
+			Key: 		path,
+			ACL: 		'public-read',
+			Body: newImage,
+			ContentType: 'image/png'
+		}
+
+		s3.putObject(params, function(err, data) {
+		  if (err) {
+			  console.log('Err putting:', err);
+			  res.send(404);
+		  } else {
+		  	console.log(path);
+		  	res.send(path);
+		  	var end = new Date().getTime();
+				var time = end - start;
+
+				var query = "INSERT INTO events (time_taken, url, id, width, height) values ($1,$2,$3,$4,$5)";
+				
+			 // console.log(newImage.width(), newImage.height());
+				// pg_client.query(query, [time,imgUrl, path, width, height], function(err, result) {
+				// 	if (err) {
+				// 		console.log('ERR:'+err);
+				// 	}
+				// });
+		  }
+	  });
+	});
+	function copy(id){
+		var params = {
+			Bucket: 'graffitiSnapshots',
+			Key: 		id,
+			ACL: 		'public-read',
+			ContentType: 'image/png',
+			CopySource: 'facebookGraffiti/'+id
+		}
+		s3.copyObject(params, function(err, data) {
+		  if (err) console.log(err, err.stack);
+		});
+	}
 	app.listen(3000);
+	copy('-2255330727544526857.png')
 }
