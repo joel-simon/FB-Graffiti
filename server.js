@@ -146,7 +146,8 @@ if (cluster.isMaster) {
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
 		var delta = images(new Buffer(data, 'base64'));
 		var start = new Date().getTime();
-
+		var width = delta.width();
+		var height = delta.height();
 		newImage = (delta).encode("png");	
 		var params = {
 			Bucket: 'graffitiSnapshots',
