@@ -167,7 +167,7 @@ if (cluster.isMaster) {
 		  	var end = new Date().getTime();
 				var time = end - start;
 
-				var query = "INSERT INTO events (time_taken, url, id, width, height, events) values ($1,$2,$3,$4,$5,$6)";
+				var query = "INSERT INTO events (time_taken, url, id, width, height, type) values ($1,$2,$3,$4,$5,$6)";
 				
 				pg_client.query(query, [time,imgUrl, path, width, height, 'share'], function(err, result) {
 					if (err) {
