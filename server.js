@@ -140,7 +140,7 @@ if (cluster.isMaster) {
 	});
 
 	app.post('/shareImage', function(req, res) {
-		var path = req.body.path+'.png';
+		var path = req.body.path+(+new Date())+'.png';
 		var img = req.body.img;
 		var imgUrl = req.body.imgUrl;
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
@@ -166,9 +166,7 @@ if (cluster.isMaster) {
 		  	res.send(path);
 		  	var end = new Date().getTime();
 				var time = end - start;
-
 				var query = "INSERT INTO events (time_taken, url, id, width, height, type) values ($1,$2,$3,$4,$5,$6)";
-				
 				pg_client.query(query, [time,imgUrl, path, width, height, 'share'], function(err, result) {
 					if (err) {
 						console.log('ERR:'+err);
@@ -190,5 +188,4 @@ if (cluster.isMaster) {
 		});
 	}
 	app.listen(3000);
-	copy('-2255330727544526857.png')
 }
