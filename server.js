@@ -47,16 +47,17 @@ if (cluster.isMaster) {
     next();
   });
 
-  function getImage(path, cb) {
-    var params = {
-      Bucket: 'facebookGraffiti',
-      Key:    path
-    };
-    s3.getObject(params, cb);
-  }
-
   app.get('/test', function(req,res) {
     res.send('Hello World');
+  });
+
+  app.get('/logs/:n', function(req,res) {
+    var days = req.params.n;
+    var query = "select * from events where post_time >= now() - interval '"+n+" days' order by post_time desc";
+    pg_client.query(query, [], function(err, result) {
+      if (err) res.send(err);
+      else res.send result.rows;
+    });
   });
 
   app.get('/share/:src', function(req, res) {
@@ -167,6 +168,15 @@ if (cluster.isMaster) {
       }
     });
   });
+
+  function getImage(path, cb) {
+    var params = {
+      Bucket: 'facebookGraffiti',
+      Key:    path
+    };
+    s3.getObject(params, cb);
+  }
+
   function copy(id){
     var params = {
       Bucket: 'graffitiSnapshots',
@@ -179,5 +189,6 @@ if (cluster.isMaster) {
       if (err) console.log(err, err.stack);
     });
   }
+
   app.listen(3000);
 }
