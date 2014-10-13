@@ -1,21 +1,24 @@
 fs = require 'fs'
 CoffeeScript = require 'coffee-script'
-jsFiles = []
 
-fs.readdir __dirname, (err,files)->
-  throw err if err?
-  c = files.length - 1
-  files.forEach (file) ->
-    if file != 'index.coffee'
+get = (cb) ->
+  jsFiles = []
+  fs.readdir __dirname, (err,files) ->
+    return cb err if err?
+    files = files.filter (f) ->
+      f != 'index.coffee' and f.match(/.+\.(coffee)/g)?
+    c = files.length
+    files.forEach (file) ->
       fs.readFile "#{__dirname}/#{file}",'utf-8', (err, code) ->
-        throw err if err?
+        return cb err if err?
+        # try
         code = if file.match(/.+\.coffee/g)? then CoffeeScript.compile code else code
+        # catch e
+        #   return cb e
+        
+        
         jsFiles.push code
         if 0 is --c
-          done()
+          cb null, jsFiles.join ''
 
-done = () ->
-  jsFiles = jsFiles.join ''
-
-module.exports = () ->
-  jsFiles
+module.exports.get = get

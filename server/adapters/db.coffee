@@ -1,9 +1,10 @@
 pg = require 'pg'
 config = require '../config'
 dbstring = config.POSTGRES_URL
+console.log dbstring
 pg.connect dbstring, (err, client, done) ->
   if not client
-    throw 'No Connection to Postgresql'
+    throw 'No Connection to Postgresql'+err
 
 rollback = (client, done) ->
   client.query 'ROLLBACK', (err) -> done err

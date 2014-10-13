@@ -22,7 +22,6 @@ var selected;
                               // 'border:1px solid black;cursor:pointer;'+
                               'hover:{color:red;};'+
                               'background:'+colors[i]+';';
-    
     $( colorDiv )
       .mouseover(function() {
         this.style.border="2px solid #3b579d";

@@ -19,7 +19,7 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [{
-    "js" : ["jquery.min.js","fbGraffiti.js"],
-    "matches": ["<all_urls>","https://www.facebook.com/*"]
+    "js" : ["fbGraffiti.js"],
+    "matches": ["https://www.facebook.com/*"]
   }]
 }
