@@ -1,28 +1,39 @@
-class Canvas
+class FbgCanvas
   constructor : (@img, @key) ->
-    # window.fbg.get.photoUi().remove()
+    @img.addClass 'hasCanvas'
     @stage = $('.stage').first()
-    $('#snowLiftStageActions').remove()
-    @canvas = $('<canvas>').attr({
-      id: @key
-      width: @img.width()
-      height: @img.height()
-    }).css({
-      position: 'absolute'
-      top: "#{(@stage.height() - @img.height())//2}px"
-      left: "#{(@stage.width() - @img.width())//2}px"
-      border : "3px ridge #3b579d"
-      zIndex: 1337
-    }).click((e) ->
-      e.stopPropagation()
-    )
+    top = "#{(@stage.height() - @img.height())//2}px"
+    left = "#{(@stage.width() - @img.width())//2}px"
+    width = @img.width()
+    height = @img.height()
+
+    @canvas = $('<canvas>')
+      .attr({ id: "#{@key}:canvas", width, height })
+      .css({
+        position: 'absolute'
+        top : top
+        left : left
+        border : "3px ridge #3b579d"
+      }).click (e) ->
+        e.stopPropagation()
+
+    @fbgImage = $('<img>')
+      .attr({
+        src : fbg.randSrc
+        id: "#{@key}:img"
+      }).css({ position: 'absolute', width, height, top, left })
+        .click (e) ->
+          e.stopPropagation()
 
   addTo : (div) ->
+    div.prepend @fbgImage
     div.prepend @canvas
 
   remove : () ->
     @canvas.remove()
+    @fbgImage.remove()
+    @img.removeClass 'hasCanvas'
     delete fbg.canvas
 
 window.fbg ?= {}
-window.fbg.Canvas = Canvas
+window.fbg.FbgCanvas = FbgCanvas

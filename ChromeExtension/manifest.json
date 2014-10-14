@@ -15,7 +15,7 @@
     "getSource.js"
   ],
   "browser_action": {
-    "default_icon": "spray.png",
+    "default_icon": "images/spray.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [{
