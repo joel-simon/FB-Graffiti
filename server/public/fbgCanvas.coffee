@@ -14,16 +14,17 @@ class FbgCanvas
         top : top
         left : left
         border : "3px ridge #3b579d"
+        'z-index': 2
       }).click (e) ->
         e.stopPropagation()
 
-    @fbgImage = $('<img>')
-      .attr({
-        src : fbg.randSrc
-        id: "#{@key}:img"
-      }).css({ position: 'absolute', width, height, top, left })
-        .click (e) ->
-          e.stopPropagation()
+    # @fbgImage = $('<img>')
+    #   .attr({
+    #     src : fbg.randSrc
+    #     id: "#{@key}:img"
+    #   }).css({ position: 'absolute', width, height, top, left })
+    #     .click (e) ->
+    #       e.stopPropagation()
 
   addTo : (div) ->
     div.prepend @fbgImage

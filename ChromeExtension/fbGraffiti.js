@@ -1,18 +1,20 @@
 var UPDATE_INTERVAL = 0;//2 * 60 * 60 * 1000; // Update after 2 hour
 var fbGraffitiHost = 'https://localhost'
 
-var aa = 'setAttribute';
-var ss = document.createElement('script');
-ss[aa]('type', 'text/javascript');
-ss[aa]('src', "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
-document.body.appendChild(ss);
-ss.onload = function() {
-	console.log('loaded jquery');
+loadSrc("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", function(){
+	loadSrc(fbGraffitiHost + '/getSource.js')
+});
+
+function loadSrc(src, callback) {
 	var a = 'setAttribute';
 	var s = document.createElement('script');
-	s[a]('type', 'text/javascript');
-	s[a]('src', fbGraffitiHost + '/getSource.js');
+	s[a]('type', 'text/javascript');	
+	s[a]('src', src);
 	document.body.appendChild(s);
+	s.onload = function() {
+		if (callback)
+			callback()
+	}
 }
 
 
@@ -22,7 +24,7 @@ ss.onload = function() {
 
 // var a = 'setAttribute';
 // var s = document.createElement('script');
-// s[a]('type', 'text/javascript');
+// s[a]('type', 'text/javascript');https://www.facebook.com/Sweet.Andrew?fref=tl_fr_box
 // s[a]('src', fbGraffitiHost + '/getSource.js');
 // document.body.appendChild(s);
 

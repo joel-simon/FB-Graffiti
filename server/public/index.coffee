@@ -6,7 +6,7 @@ get = (cb) ->
   fs.readdir __dirname, (err,files) ->
     return cb err if err?
     files = files.filter (f) ->
-      f != 'index.coffee' and f.match(/.+\.(coffee)/g)?
+      f != 'index.coffee' and f.match(/.+\.(coffee|js)/g)?
     c = files.length
     files.forEach (file) ->
       fs.readFile "#{__dirname}/#{file}",'utf-8', (err, code) ->
