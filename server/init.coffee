@@ -3,8 +3,10 @@ async = require('async')
 
 initQuery = 'CREATE TABLE events (
   post_time timestamp with time zone NOT NULL DEFAULT now(),
-  time_taken integer NOT NULL, 
-  url text NOT NULL, 
+  time_taken integer NOT NULL,
+  width integer NOT NULL,
+  height integer NOT NULL,
+  type text NOT NULL,
   id text NOT NULL
 )'
 

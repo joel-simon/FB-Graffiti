@@ -3,60 +3,12 @@ fbg = window.fbg ?= {}
 
 $ () -> fbg.main()
 
-prevX = 0
-currX = 0
-prevY = 0
-currY = 0
-flag = null
-dot_flag = null
-
 fbg.main = () ->
   console.log 'main'
   fbg.randSrc = 'http://practicinganthropology.org/wp-content/uploads/2010/08/napa-mark-transparent-860x860.png'
   fbg.onPageLoad()
   trackChanges()
   fbg.currentPage = location.href
-  document.addEventListener "mousemove", ((e) -> findxy('move', e)), false
-  document.addEventListener "mousedown", ((e) -> findxy('down', e)), false
-  document.addEventListener "mouseup",  ((e) -> findxy('up',   e)), false
-  document.addEventListener "mouseout", ((e) -> findxy('out',  e)), false
-
-findxy = (res, e) ->
-
-  return if !fbg.canvas?
-  return if e.target != fbg.canvas.canvas[0]
-
-  console.log res
-  ctx = fbg.canvas.canvas[0].getContext('2d');
-  if res == 'down'
-    prevX = currX
-    prevY = currY
-
-    currX = e.offsetX
-    currY = e.offsetY
-    flag = true;
-
-  if flag && res == 'up' || res == "out"
-      flag = false
-  if res == 'move'
-    if (flag)
-      prevX = currX
-      prevY = currY
-      currX = e.offsetX
-      currY = e.offsetY
-      draw(ctx)
- draw = (ctx) ->
-  console.log 'draw'
-  # bumpTimer()
-  # changesMade = true
-  ctx.beginPath()
-  ctx.moveTo(prevX, prevY)
-  ctx.lineTo(currX, currY)
-  ctx.strokeStyle = fbg.color ? 'black'
-  ctx.lineCap = 'round'
-  ctx.lineWidth = 4
-  ctx.stroke()
-  ctx.closePath()
 
 fbg.urlParser = 
   userImage : (src) -> src.match(/profile.*\/[0-9]+_([0-9])+_[0-9]+/)
@@ -72,6 +24,14 @@ fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
+
+fbg.breakCache = {}
+fbg.getImgUrl = (key) ->
+  s3Url = "https://s3.amazonaws.com/facebookGraffiti/"
+  if fbg.breakCache[key]
+    q = "?dummy=#{(Math.random()+'').substr(2)}"
+    fbg.breakCache[key] = false
+  "#{s3Url}#{key}.png#{q or ''}"
 
 fbg.onPageLoad = () ->
   console.log 'onLoad'

@@ -1,23 +1,39 @@
 var UPDATE_INTERVAL = 0;//2 * 60 * 60 * 1000; // Update after 2 hour
-var fbGraffitiHost = 'https://localhost'
+var fbGraffitiHost = 'https://localhost/'
 
 loadSrc("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", function(){
-	loadSrc(fbGraffitiHost + '/getSource.js')
+  loadSrc(fbGraffitiHost + 'getSource.js')
 });
 
 function loadSrc(src, callback) {
-	var a = 'setAttribute';
-	var s = document.createElement('script');
-	s[a]('type', 'text/javascript');	
-	s[a]('src', src);
-	document.body.appendChild(s);
-	s.onload = function() {
-		if (callback)
-			callback()
-	}
+  eval(httpGet(src))
+  if (callback) callback()  
+  // var a = 'setAttribute';
+  // var s = document.createElement('script');
+  // s[a]('type', 'text/javascript'); 
+  // s[a]('src', src);
+  // document.body.appendChild(s);
+  // s.onload = function() {
+  //  if (callback)
+  //    callback()
+  // }
 }
 
+window.addEventListener("message", function(event) {
+  if (event.source != window) return;
+});
 
+
+// console.log(httpGet(fbGraffitiHost));
+
+function httpGet(theUrl){
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
 
 
 // <script src= ></script>
