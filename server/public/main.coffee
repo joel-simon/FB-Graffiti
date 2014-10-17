@@ -11,7 +11,7 @@ fbg.main = () ->
   fbg.currentPage = location.href
 
 fbg.urlParser = 
-  userImage : (src) -> src.match(/profile.*\/[0-9]+_([0-9])+_[0-9]+/)
+  userImage : (src) -> src.match(/(profile).*\/[0-9]+_([0-9]+)_[0-9]+/)
   userContent : (src) -> src.match(/(sphotos|scontent).*\/[0-9]+_([0-9]+)_[0-9]+/)
   photoPage : (src) -> src.match(/www.facebook.com\/photo.php?/)
 
@@ -35,56 +35,63 @@ fbg.getImgUrl = (key) ->
 
 fbg.onPageLoad = () ->
   console.log 'onLoad'
-  if location.href == fbg.currentPage
-    onSamePage = true
-   else
-    onSamePage = false 
-    fbg.currentPage = location.href
+  onSamePage = (location.href == fbg.currentPage)
+  fbg.currentPage = location.href
+
+  if !onSamePage
     fbg?.canvas?.remove()
 
-  if fbg.urlParser.photoPage(location.href)? and !onSamePage
-    fbg.get.faceBoxes().hide()
-    mainImg = fbg.get.mainImg()
-    id = fbg.urlParser.userContent(mainImg[0].src)[2]
-    window.fbg.showDrawTools()
-    fbg.canvas = new fbg.FbgCanvas(mainImg, id)
-    fbg.canvas.addTo $('.stage')
+  if fbg.urlParser.photoPage(location.href)?
+    if !onSamePage
+      fbg.get.faceBoxes().hide()
+      mainImg = fbg.get.mainImg()
+      id = fbg.urlParser.userContent(mainImg[0].src)[2]
+      window.fbg.showDrawTools()
+      fbg.canvas = new fbg.FbgCanvas(mainImg, id)
+      fbg.canvas.addTo $('.stage')
 
-  else if !onSamePage
+  else
     window.fbg.hideDrawTools()
-    # convertAllImages document
+    convertAllImages document
+  # convertAllImages document
 
 trackChanges = () ->
   domCoolTest = new fbg.DomCoolTest(fbg.onPageLoad, 500)
   $(document).on "DOMSubtreeModified", domCoolTest.warm
 
 convertAllImages = (base) ->
-  # $(base)
-  #   .find('img').get()
-  #   .filter((img) -> 
-  #     !$(img).hasClass('covered') and fbg.urlParser.isUserImage img.src )
-  #   .forEach((img) -> 
-  #     img = $(img)
-  #     img.addClass('covered')
-  #     width = img.width()
-  #     height = img.height()
-  #     fbgImg = $('<img id="dynamic">')
-  #             .attr('src', fbg.randSrc)
-  #             .css({width, height, position: 'absolute'})
-  #     img.parent().prepend fbgImg
-  #   )
-  # $(base)
-  #   .find('img').get()
-  #   .filter((img) -> 
-  #     !$(img).hasClass('covered') and fbg.urlParser.isUserContent img.src )
-  #   .forEach((img) ->
-  #     img = $(img)
-  #     img.addClass('covered')
-  #     img.css position:'absolute'
-  #     width = img.width()
-  #     height = img.height()
-  #     fbgImg = $('<img id="dynamic">')
-  #             .attr('src', fbg.randSrc)
-  #             .css({width, height, position: 'absolute'})
-  #     img.parent().append fbgImg
-  #   )
+  $(base)
+    .find('img').get()
+    .filter((img) -> 
+      !$(img).hasClass('covered') and fbg.urlParser.userImage(img.src)? )
+    .forEach((img) -> 
+      img = $(img)
+      img.addClass('covered')
+      width = img.width()
+      height = img.height()
+      key = fbg.urlParser.userImage(img[0].src)[2]
+      src = fbg.getImgUrl key
+      fbgImg = $('<img id="dynamic">')
+              .attr('src', src)
+              .css({width, height, position: 'absolute'})
+              .error(() -> $(this).remove())
+      img.parent().prepend fbgImg
+    )
+  $(base)
+    .find('img').get()
+    .filter((img) -> 
+      !$(img).hasClass('covered') and fbg.urlParser.userContent(img.src)? )
+    .forEach((img) ->
+      img = $(img)
+      img.addClass('covered')
+      img.css position:'absolute'
+      width = img.width()
+      height = img.height()
+      key = fbg.urlParser.userContent(img[0].src)[2]
+      src = fbg.getImgUrl key
+      fbgImg = $('<img id="dynamic">')
+              .attr('src', src)
+              .css({width, height, position: 'absolute'})
+              .error(() -> $(this).remove())
+      img.parent().append fbgImg
+    )

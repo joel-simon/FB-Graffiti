@@ -21,8 +21,8 @@ newImage = ({res, path, start, delta}) ->
   type = 'new'
   width = delta.width()
   height = delta.height()
-  newImage = (delta).encode 'png'
-  done { res, newImage, path, start, width, height, type }
+  img = (delta).encode 'png'
+  done { res, img, path, start, width, height, type }
 
 existingImage = ({res, path, start, delta, data}) ->
   console.log 'Existing image'
@@ -35,17 +35,17 @@ existingImage = ({res, path, start, delta, data}) ->
   width = oldWidth
   height = oldHeight
   if (dHeight > oldHeight && dWidth == oldWidth) # need to englarge image.
-    newImage = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png")
+    img = images(dWidth, dHeight).draw(oldImg,0,0).draw(delta,0,0).encode("png")
     height = dHeight
   else if (dHeight != oldHeight or dWidth != oldWidth)
-    newImage = oldImg.draw(delta.size(oldWidth, oldHeight),0,0).encode("png")
+    img = oldImg.draw(delta.size(oldWidth, oldHeight),0,0).encode("png")
   else
-    newImage = oldImg.draw(delta,0,0).encode "png"
-  done { res, newImage, path, start, width, height, type }
+    img = oldImg.draw(delta,0,0).encode "png"
+  done { res, img, path, start, width, height, type }
 
-done = ({ res, newImage, path, start, width, height, type }) ->
+done = ({ res, img, path, start, width, height, type }) ->
   time = (new Date().getTime()) - start
-  s3.putImage {bucket:'facebookGraffiti', img: newImage, path}, (err) ->
+  s3.putImage {bucket:'facebookGraffiti', img, path}, (err) ->
     if err?
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400 

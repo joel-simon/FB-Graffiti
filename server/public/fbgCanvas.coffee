@@ -29,6 +29,7 @@ class FbgCanvas
         src : fbg.getImgUrl @key
         id: "#{@key}:img"
       }).css({ position: 'absolute', width, height, top, left })
+      .error(() -> $(this).remove())
       .click (e) ->
         e.stopPropagation()
 
