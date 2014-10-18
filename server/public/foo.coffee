@@ -29,8 +29,11 @@ ColorPicker(
   )
 
 window.fbg ?= {}
+
 window.fbg.hideDrawTools = () ->
   $('#slider,#picker').hide()
 
 window.fbg.showDrawTools = () ->
   $('#slider,#picker').show()
+
+window.fbg.hideDrawTools()

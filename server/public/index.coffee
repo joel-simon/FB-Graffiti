@@ -11,10 +11,10 @@ get = (cb) ->
     files.forEach (file) ->
       fs.readFile "#{__dirname}/#{file}",'utf-8', (err, code) ->
         return cb err if err?
-        # try
-        code = if file.match(/.+\.coffee/g)? then CoffeeScript.compile code else code
-        # catch e
-        #   return cb e
+        try
+          code = if file.match(/.+\.coffee/g)? then CoffeeScript.compile code else code
+        catch e
+          return cb "#{file}: #{e}"
         
         
         jsFiles.push code

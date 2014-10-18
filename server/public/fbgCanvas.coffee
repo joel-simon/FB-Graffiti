@@ -18,7 +18,7 @@ class FbgCanvas
         position: 'absolute'
         top : top
         left : left
-        border : "3px ridge #3b579d"
+        # border : "3px ridge #3b579d"
         'z-index': 2
       }).click (e) ->
         e.stopPropagation()
@@ -48,30 +48,20 @@ class FbgCanvas
     div.prepend @fbgImage
     div.prepend @canvas
 
-  remove : () ->
-    domain = 'https://localhost/'
-    console.log @changesMade
-  
+  remove : () ->  
     if @changesMade
       fbg.breakCache[@key] = true
-      data = 
-        img : @canvas[0].toDataURL()
-        key : @key
-
-      $.ajax {
-        type:'POST',
-        url: domain+'setImage',
-        data : data
-        cache : false
-        error: (data) -> console.log("error sending image..", data)
-        cache : false
-      }
+      postToServer { key : @key, img: @canvas[0].toDataURL() }, 'setImage'
 
     console.log "Removing: #{@key}"
     @canvas.remove()
     @fbgImage.remove()
     @img.removeClass 'hasCanvas'
     delete fbg.canvas
+
+  postToServer : (data, url) ->
+    domain = 'https://localhost'
+    $.ajax { type:'POST', url: "#{domain}/setImage", data }
 
 window.fbg ?= {}
 window.fbg.FbgCanvas = FbgCanvas

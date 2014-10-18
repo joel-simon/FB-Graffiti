@@ -1,48 +1,34 @@
 var UPDATE_INTERVAL = 0;//2 * 60 * 60 * 1000; // Update after 2 hour
 var fbGraffitiHost = 'https://localhost/'
 
-loadSrc("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", function(){
-  loadSrc(fbGraffitiHost + 'getSource.js')
+get("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", function(code) {
+  if (!code) return;
+  execute(code);
+  get(fbGraffitiHost + 'getSource.js', function(code) {
+    if (!code) return;
+    execute(code)
+  });
 });
 
-function loadSrc(src, callback) {
-  eval(httpGet(src))
-  if (callback) callback()  
-  // var a = 'setAttribute';
-  // var s = document.createElement('script');
-  // s[a]('type', 'text/javascript'); 
-  // s[a]('src', src);
-  // document.body.appendChild(s);
-  // s.onload = function() {
-  //  if (callback)
-  //    callback()
-  // }
+function execute(code) {
+  try { window.eval(code) } catch (e) { console.error(e) }
 }
 
-window.addEventListener("message", function(event) {
-  if (event.source != window) return;
-});
-
-
-// console.log(httpGet(fbGraffitiHost));
-
-function httpGet(theUrl){
-    var xmlHttp = null;
-
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false );
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
+function get(url, callback) {
+  console.log('Getting over http');
+  var x = new XMLHttpRequest();
+  x.onload = x.onerror = function() { callback(x.responseText); };
+  x.open('GET', url);
+  x.send();
 }
 
-
-// <script src= ></script>
-
-// var a = 'setAttribute';
-// var s = document.createElement('script');
-// s[a]('type', 'text/javascript');https://www.facebook.com/Sweet.Andrew?fref=tl_fr_box
-// s[a]('src', fbGraffitiHost + '/getSource.js');
-// document.body.appendChild(s);
+// function httpGet(theUrl){
+//   var xmlHttp = null;
+//   xmlHttp = new XMLHttpRequest();
+//   xmlHttp.open( "GET", theUrl, false );
+//   xmlHttp.send( null );
+//   return xmlHttp.responseText;
+// }
 
 // chrome.storage.local.get({
 //   lastUpdated: 0,
@@ -63,15 +49,6 @@ function httpGet(theUrl){
 //       // get(chrome.extension.getURL('ga.js'), execute);
 // });
 
-// // Typically run within a few milliseconds
-// function execute(code) {
-//   try { window.eval(code); } catch (e) { console.error(e); }
-// }
+// Typically run within a few milliseconds
 
-// function get(url, callback) {
-//   console.log('Getting over http');
-//   var x = new XMLHttpRequest();
-//   x.onload = x.onerror = function() { callback(x.responseText); };
-//   x.open('GET', url);
-//   x.send();
-// }
+
