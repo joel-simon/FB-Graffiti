@@ -8,7 +8,7 @@ class DomCoolTest
       @timer = null
     @timer = setTimeout (()=>
       @timer = null
-      @onCool()   
+      @onCool()
     ), @t
   
   isWarm : () -> @timer?

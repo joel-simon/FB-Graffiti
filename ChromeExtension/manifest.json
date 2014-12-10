@@ -12,14 +12,14 @@
     "images/sprayCan.png",
     "images/share.png",
     "fbGraffiti.js",
-    "getSource.js"
+    "jquery.min.js"
   ],
   "browser_action": {
     "default_icon": "images/spray.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [{
-    "js" : ["fbGraffiti.js"],
+    "js" : ["fbGraffiti.js", "jquery.min.js"],
     "matches": ["https://www.facebook.com/*"]
   }]
 }

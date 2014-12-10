@@ -2,16 +2,19 @@ db = require '../adapters/db'
 s3 = require '../adapters/s3'
 images = require 'images'
 
-
-
 module.exports = (req, res) ->
-  {key, img} = req.body
-  path = "#{key}.png"
+  { id, img } = req.body
+  if !id or !img
+    console.log 'Invalid setImage post params:', req.body
+    return res.send 400
+
+  path = "#{id}.png"
+  console.log {path}
 
   formatted = img.replace /^data:image\/\w+;base64,/, ""
   delta = images new Buffer(formatted, 'base64')
   start = new Date().getTime()
-  console.log path
+  
   s3.getImage { bucket: 'facebookGraffiti', path }, (err, data) ->
     options = { res, path, start, delta, data }
     if err then newImage options else existingImage options
@@ -45,15 +48,13 @@ existingImage = ({res, path, start, delta, data}) ->
 
 done = ({ res, img, path, start, width, height, type }) ->
   time = (new Date().getTime()) - start
-  s3.putImage {bucket:'facebookGraffiti', img, path}, (err) ->
+  s3.putImage { bucket: 'facebookGraffiti', img, path }, (err) ->
     if err?
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400 
-    res.send(path);
     query = 'INSERT INTO 
               events (time_taken, id, width, height, type)
             VALUES ($1,$2,$3,$4,$5)'
     values = [time, path.split('.')[0], width, height, type]
     db.query query, values, (err, result) ->
-      if err?
-        console.log "ERR:#{JSON.stringify(err)}"
+      console.log "Error querying: #{JSON.stringify(err)}" if err?

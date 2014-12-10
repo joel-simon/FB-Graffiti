@@ -1,10 +1,16 @@
 'use strict'
-fbg = window.fbg ?= {}
+window.fbg ?= {}
+fbg.cache = null
+drawTools = null
 
-$ () -> 
+$ () ->
+  fbg.cache = new fbg.ImageCache()
+  drawTools = new fbg.DrawTools()
+  fbg.currentPage = location.href
+
   fbg.onPageLoad()
   trackChanges()
-  fbg.currentPage = location.href
+  
 
 fbg.urlParser = 
   userImage : (src) -> src.match(/(profile).*\/[0-9]+_([0-9]+)_[0-9]+/)
@@ -17,21 +23,11 @@ fbg.get =
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
 
-# After an image has been edited, we want to relaod it.
-fbg.breakCache = { }
-fbg.getImgUrl = (key) ->
-  s3Url = "https://s3.amazonaws.com/facebookGraffiti/"
-  if fbg.breakCache[key]
-    q = "?dummy=#{(Math.random()+'').substr(2)}"
-    fbg.breakCache[key] = false
-  "#{s3Url}#{key}.png#{q or ''}"
-
 # triggered anytime new dom is loaded.
 fbg.onPageLoad = () ->
-  
   onNewPage = (location.href != fbg.currentPage)
-  console.log 'onLoad', {onNewPage}
   onPhotoPage = fbg.urlParser.photoPage(location.href)?
+  # console.log 'onLoad', { onNewPage, onPhotoPage }
   fbg.currentPage = location.href
 
   if onNewPage
@@ -40,41 +36,29 @@ fbg.onPageLoad = () ->
       fbg.get.faceBoxes().hide()
       mainImg = fbg.get.mainImg()
       id = fbg.urlParser.userContent(mainImg[0].src)[2]
-      window.fbg.showDrawTools()
-      fbg.canvas = new fbg.FbgCanvas(mainImg, id)
+      fbg.cache.break id
+      url = fbg.cache.idToUrl id
+      
+      fbg.canvas = new fbg.FbgCanvas(mainImg, id, url)
       fbg.canvas.addTo $('.stage')
-      window.fbg.showDrawTools
+
+      drawTools.show()
     else
-      window.fbg.hideDrawTools()
-    # else
-    #   convertAllImages document  
-  # check for new images that have been labled.
-  else
-    convertAllImages document
+      drawTools.hide()
+      # fbg.hideDrawTools()
+  else # check for new images that have been labled.
+    convertAllImages document.body
 
 trackChanges = () ->
-  domCoolTest = new fbg.DomCoolTest(fbg.onPageLoad, 500)
+  domCoolTest = new fbg.DomCoolTest fbg.onPageLoad, 300
   $(document).on "DOMSubtreeModified", domCoolTest.warm
 
 convertAllImages = (base) ->
-  $(base)
-    .find('img').not('.covered').not('.spotlight').each () -> #.:not(covered)
-      id = fbg.urlParser.id(this.src)
-      return if !id?
-
-      img = $(this)
-      img.addClass('covered')
-      if fbg.urlParser.userContent(img[0].src)?
-        img.css position:'absolute'
-      width = img.width()
-      height = img.height()
-      left = img.css('left') or 0
-      top = img.css('top') or 0
-      src = fbg.getImgUrl id[1]
-      fbgImg = $('<img id="dynamic">')
-                .attr('src', src)
-                .css({width, height, left, top, position: 'absolute', 'z-index': 2})
-                .error(() -> 
-                  $(this).remove()
-                )
-      img.parent().prepend fbgImg
+  $(base).find('img').not('.hasGraffiti').not('.spotlight').each () ->
+    id = fbg.urlParser.id @src
+    img = $(@)
+    return unless id?
+    id = id[1]
+    url = fbg.cache.idToUrl id
+    return if url is null
+    new fbg.FbgImg(img, id, url)
