@@ -1,6 +1,5 @@
 'use strict'
 window.fbg ?= {}
-fbg.cache = null
 drawTools = null
 
 $ () ->
