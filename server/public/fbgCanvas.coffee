@@ -56,20 +56,19 @@ class FbgCanvas
     delete fbg.canvas
 
   postToServer: (data, url) ->
-    domain = 'https://localhost'
-    $.ajax { type:'POST', url: "#{domain}/setImage", data }
+    $.ajax { type:'POST', url: "#{fbg.host}setImage", data }
 
   addToOtherCopies: (canvasImg) ->
     # console.log 'adding to other copies', ".img"+@id
     
     #if an existing graffiti image, repalce it
+    width = @img.width()
+    height= @img.height()
     if @img.hasClass 'hasGraffiti'
-      newImageCanvas = $('<canvas>').attr({
-        width: @img.width(), height: @img.height()
-      })
+      newImageCanvas = $('<canvas>').attr { width, height }
       ctx = newImageCanvas[0].getContext('2d')
-      ctx.drawImage @graffitiImage[0], 0, 0
-      ctx.drawImage @canvas[0], 0, 0
+      ctx.drawImage @graffitiImage[0], 0, 0, width, height
+      ctx.drawImage @canvas[0], 0, 0, width, height
 
       newImage = newImageCanvas[0].toDataURL()
       fbg.cache.add @id, newImage

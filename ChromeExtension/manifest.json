@@ -3,7 +3,7 @@
 
   "name": "FB Graffiti",
   "description": "Facebook walls are now open to graffiti.",
-  "version": "2.0.0",
+  "version": "2.0.1",
 
   "permissions": [
     "tabs", "http://*/*", "https://*/*","storage"
@@ -12,14 +12,15 @@
     "images/sprayCan.png",
     "images/share.png",
     "fbGraffiti.js",
-    "jquery.min.js"
+    "jquery.min.js",
+    "spectrum.js"
   ],
   "browser_action": {
     "default_icon": "images/spray.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [{
-    "js" : ["fbGraffiti.js", "jquery.min.js"],
+    "js" : ["fbGraffiti.js", "jquery.min.js", "spectrum.js"],
     "matches": ["https://www.facebook.com/*"]
   }]
 }

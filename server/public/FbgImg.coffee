@@ -8,8 +8,8 @@ class FbgImg
     .css({
       position: 'absolute'
       'z-index': 2
-      width: img.width()
-      height: img.height()
+      width: img.outerWidth()
+      height: img.outerHeight()
       left: img.css('left') or 0
       top: img.css('top') or 0
     })

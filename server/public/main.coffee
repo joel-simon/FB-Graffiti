@@ -1,15 +1,9 @@
 'use strict'
 window.fbg ?= {}
-drawTools = null
 
-$ () ->
-  fbg.cache = new fbg.ImageCache()
-  drawTools = new fbg.DrawTools()
-  fbg.currentPage = location.href
-
-  fbg.onPageLoad()
-  trackChanges()
-  
+# fbg.host = 'https://54.69.196.168/'
+fbg.host = 'https://localhost/'
+fbg.cache = new fbg.ImageCache()
 
 fbg.urlParser = 
   userImage : (src) -> src.match(/(profile).*\/[0-9]+_([0-9]+)_[0-9]+/)
@@ -21,6 +15,14 @@ fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
+
+
+$ () ->
+  fbg.drawTools = new fbg.DrawTools()
+  fbg.currentPage = location.href
+  fbg.onPageLoad()
+  trackChanges()
+  
 
 # triggered anytime new dom is loaded.
 fbg.onPageLoad = () ->
@@ -41,10 +43,9 @@ fbg.onPageLoad = () ->
       fbg.canvas = new fbg.FbgCanvas(mainImg, id, url)
       fbg.canvas.addTo $('.stage')
 
-      drawTools.show()
+      fbg.drawTools.show()
     else
-      drawTools.hide()
-      # fbg.hideDrawTools()
+      fbg.drawTools.hide()
   else # check for new images that have been labled.
     convertAllImages document.body
 

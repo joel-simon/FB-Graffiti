@@ -1,12 +1,12 @@
-var UPDATE_INTERVAL = 0;//2 * 60 * 60 * 1000; // Update after 2 hour
+var UPDATE_INTERVAL = 0;//2 * 60 * 60 * 1000; // Update after 2 hours
+// var fbGraffitiHost = 'https://facebookgraffiti/getSource.js';
 var fbGraffitiHost = 'https://localhost/getSource.js';
 
-// var start = new Date().getTime();
 console.time('Got and executed FBGraffiti');
 function execute(code) {
-  try { window.eval(code) } catch (e) { console.error(e) }
+  // try { window.eval(code) } catch (e) { console.error(e) }
+  window.eval(code)
   console.timeEnd('Got and executed FBGraffiti');
-  // console.log('Executed fbgSource in:', new Date().getTime() - start);
 }
 
 function get(url, callback) {
