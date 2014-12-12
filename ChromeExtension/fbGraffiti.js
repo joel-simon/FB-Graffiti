@@ -1,6 +1,6 @@
 var UPDATE_INTERVAL = 0;//2 * 60 * 60 * 1000; // Update after 2 hours
-// var fbGraffitiHost = 'https://facebookgraffiti/getSource.js';
-var fbGraffitiHost = 'https://localhost/getSource.js';
+var fbGraffitiHost = 'https://fb-graffiti.com/getSource.js';
+// var fbGraffitiHost = 'https://localhost/getSource.js';
 
 console.time('Got and executed FBGraffiti');
 function execute(code) {
