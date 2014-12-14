@@ -11,16 +11,16 @@
   "web_accessible_resources": [
     "images/sprayCan.png",
     "images/share.png",
-    "fbGraffiti.js",
     "jquery.min.js",
-    "spectrum.js"
+    "spectrum.js",
+    "fbGraffiti.js"
   ],
   "browser_action": {
     "default_icon": "images/spray.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [{
-    "js" : ["fbGraffiti.js", "jquery.min.js", "spectrum.js"],
+    "js" : ["jquery.min.js", "spectrum.js","fbGraffiti.js"],
     "matches": ["https://www.facebook.com/*"]
   }]
 }

@@ -3,13 +3,12 @@ requestHandlers = require './requestHandlers'
 https = require 'https'
 express = require 'express'
 fs = require 'fs'
-port = 443
 port = 8080
 
 app = express()
 
 bodyParser = require 'body-parser'
-app.use bodyParser limit: '50mb'
+app.use bodyParser limit: '20mb'
 app.set 'views', "#{__dirname}/views"
 app.set 'view engine', 'jade'
 
@@ -34,11 +33,11 @@ options =
   key : fs.readFileSync './certs/fbg-key.pem', 'utf8'
   cert : fs.readFileSync './certs/fbg-cert.pem', 'utf8'
 
-server = https.createServer(options, app).listen(443)
-server.listen port, () ->
-  console.log "Server started on port:#{port}"
+# server = https.createServer(options, app).listen(443)
+# server.listen port, () ->
+#   console.log "Server started on port:#{port}"
 
-# server = app.listen port, () ->
-#   host = server.address().address
-#   port = server.address().port
-  # console.log('Example app listening at http://%s:%s', host, port)
+server = app.listen port, () ->
+  host = server.address().address
+  port = server.address().port
+  console.log('Example app listening at http://%s:%s', host, port)

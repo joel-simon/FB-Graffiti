@@ -3,7 +3,10 @@ class fbg.DrawTools
     $("<input type='text'/>")
       .attr({id:'custom'})
       .prependTo $(document.body)
-      .spectrum({ color: "#f00" })
+      .spectrum({ 
+        color: "#f00"
+        allowEmpty: true
+       })
       .hide()
     @hide()
 

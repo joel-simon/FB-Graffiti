@@ -1,8 +1,7 @@
 'use strict'
 window.fbg ?= {}
 
-# fbg.host = 'https://54.69.196.168/'
-fbg.host = 'https://localhost/'
+fbg.host = 'https://fb-graffiti.com/'
 fbg.cache = new fbg.ImageCache()
 
 fbg.urlParser = 
