@@ -1,4 +1,12 @@
 FB-Graffiti
 ==================
+[Fb Graffiti](http://facebookgraffiti.com) is the hottest thing on the internet.
 
-Fb Graffiti is the coolest thing on the internet right now.
+
+### TODO
+* Add size selector
+* Add erase
+* Add bookmarklet (low priority)
+* Firefox extension
+* Safari Extension (probably not worth it)
+* Stream of friends photos
