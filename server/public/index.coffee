@@ -16,7 +16,6 @@ get = (cb) ->
         catch e
           return cb "#{file}: #{e}"
         
-        
         jsFiles.push code
         if 0 is --c
           cb null, jsFiles.join ''

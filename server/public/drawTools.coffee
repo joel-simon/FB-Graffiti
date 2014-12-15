@@ -7,7 +7,6 @@ class fbg.DrawTools
         color: "#f00"
         allowEmpty: true
        })
-      .hide()
     @hide()
 
   hide: () ->

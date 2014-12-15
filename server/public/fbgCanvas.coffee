@@ -80,7 +80,7 @@ class FbgCanvas
         img.attr({ src: newImage })
 
     else #if image currently has no graffiti then add it
-      console.log 'hasNoGraffiti'
+      # console.log 'hasNoGraffiti'
       fbg.cache.add @id, canvasImg
       id = @id
       $(document.body).find('img').not('.hasGraffiti').not('.spotlight').each () ->

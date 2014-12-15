@@ -1,4 +1,3 @@
-'use strict'
 window.fbg ?= {}
 
 fbg.host = 'https://fb-graffiti.com/'
@@ -14,14 +13,6 @@ fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
-
-
-$ () ->
-  fbg.drawTools = new fbg.DrawTools()
-  fbg.currentPage = location.href
-  fbg.onPageLoad()
-  trackChanges()
-  
 
 # triggered anytime new dom is loaded.
 fbg.onPageLoad = () ->
@@ -61,3 +52,10 @@ convertAllImages = (base) ->
     url = fbg.cache.idToUrl id
     return if url is null
     new fbg.FbgImg(img, id, url)
+
+$ () ->
+  fbg.drawTools = new fbg.DrawTools()
+  fbg.currentPage = location.href
+  fbg.onPageLoad()
+  trackChanges()
+  

@@ -10,10 +10,7 @@ module.exports =
     s3.getObject params, callback
 
   putImage : ({ bucket, path, img }, callback) ->
-    # return callback 'no img given ' if not img?
-    # return callback 'no bucket given ' if not bucket?
-    # return callback 'no path given ' if not path?
-    console.log 'putImage', bucket, path, img
+    console.log 'putImage', bucket, path
     params =
       Bucket: bucket
       Key: path
