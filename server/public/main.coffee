@@ -6,9 +6,11 @@ fbg.cache = new fbg.ImageCache()
 fbg.urlParser = 
   userImage : (src) -> src.match(/(profile).*\/[0-9]+_([0-9]+)_[0-9]+/)
   userContent : (src) -> src.match(/(sphotos|scontent).*\/[0-9]+_([0-9]+)_[0-9]+/)
-  photoPage : (src) -> src.match(/www.facebook.com\/photo.php?/)
+  photoPage : (src) -> 
+    src.match(/www.facebook.com\/photo.php?/) or 
+    src.match(/www.facebook.com\/.*\/photos/)
   id : (src) -> src.match(/\/[0-9]+_([0-9]+)_[0-9]+/)
-
+#https://www.facebook.com/barackobama/photos/a.428653951748.228645.6815841748/10151878817796749/?type=1&theater
 fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')

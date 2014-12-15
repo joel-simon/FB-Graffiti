@@ -1,6 +1,14 @@
 var UPDATE_INTERVAL =  2 * 60 * 60 *1000; // Update after 2 hours
 var fbGraffitiHost = 'https://s3.amazonaws.com/facebookgraffiti.com/source.js';
 
+window.updateFBG = function() {
+  get(fbGraffitiHost, function(code) {
+    if (!code) return console.log("Failed to get from source");
+    console.log('Got fresh code.');
+    chrome.storage.local.set({ lastUpdated: Date.now(), code: code });
+  });
+}
+
 function execute(code) {
   window.eval(code);
   console.timeEnd('Got and executed FBGraffiti');
@@ -20,15 +28,10 @@ chrome.storage.local.get({
   code: ''
 }, function(items) {
   // update stored copy if past date
-  console.log(Date.now() - items.lastUpdated, UPDATE_INTERVAL);
   if (Date.now() - items.lastUpdated > UPDATE_INTERVAL) {
     console.log('Updating from server.');
-    get(fbGraffitiHost, function(code) {
-      if (!code) return console.log("Failed to get from source");
-      chrome.storage.local.set({lastUpdated: Date.now(), code: code});
-    });
+    window.updateFBG();
   }
-
   if (items.code) {
     execute(items.code);
   } else {
@@ -36,3 +39,4 @@ chrome.storage.local.get({
   }
   
 });
+
