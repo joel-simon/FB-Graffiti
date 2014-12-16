@@ -4,8 +4,8 @@ class fbg.DrawTools
       .attr({id:'custom'})
       .prependTo $(document.body)
       .spectrum({ 
-        color: "#f00"
-        allowEmpty: true
+        color: "#000"
+        # allowEmpty: true
        })
     @hide()
 

@@ -10,7 +10,10 @@ window.updateFBG = function() {
 }
 
 function execute(code) {
-  window.eval(code);
+  // var script = document.createElement("script");
+  // script.innerHTML = code;
+  // document.body.appendChild(script);
+  eval(code);
   console.timeEnd('Got and executed FBGraffiti');
 }
 

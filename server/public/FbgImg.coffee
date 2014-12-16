@@ -1,18 +1,18 @@
 class FbgImg
   constructor: (img, key, url) ->
     img.addClass 'hasGraffiti'
-    domElem = $('<img>').attr({
-      src : url
-    })
-    .addClass('img'+key)
-    .css({
+    css =
       position: 'absolute'
-      'z-index': 2
+      'z-index': 3
       width: img.outerWidth()
       height: img.outerHeight()
-      left: img.css('left') or 0
-      top: img.css('top') or 0
-    })
+
+    css.left = img.css('marginLeft') if img.css('marginLeft') != '0px'
+    css.top = img.css('marginTop') if img.css('marginTop') != '0px'
+
+    domElem = $('<img>').attr { src: url }
+    .addClass 'img'+key
+    .css( css )
     .error (e) ->
       img.removeClass 'hasGraffiti'
       $(@).remove()

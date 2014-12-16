@@ -1,7 +1,5 @@
 window.fbg ?= {}
-
 fbg.host = 'https://fb-graffiti.com/'
-fbg.cache = new fbg.ImageCache()
 
 fbg.urlParser = 
   userImage : (src) -> src.match(/(profile).*\/[0-9]+_([0-9]+)_[0-9]+/)
@@ -20,7 +18,6 @@ fbg.get =
 fbg.onPageLoad = () ->
   onNewPage = (location.href != fbg.currentPage)
   onPhotoPage = fbg.urlParser.photoPage(location.href)?
-  # console.log 'onLoad', { onNewPage, onPhotoPage }
   fbg.currentPage = location.href
 
   if onNewPage
@@ -31,10 +28,8 @@ fbg.onPageLoad = () ->
       id = fbg.urlParser.userContent(mainImg[0].src)[2]
       fbg.cache.break id
       url = fbg.cache.idToUrl id
-      
       fbg.canvas = new fbg.FbgCanvas(mainImg, id, url)
       fbg.canvas.addTo $('.stage')
-
       fbg.drawTools.show()
     else
       fbg.drawTools.hide()
@@ -56,6 +51,7 @@ convertAllImages = (base) ->
     new fbg.FbgImg(img, id, url)
 
 $ () ->
+  fbg.cache = new fbg.ImageCache()
   fbg.drawTools = new fbg.DrawTools()
   fbg.currentPage = location.href
   fbg.onPageLoad()
