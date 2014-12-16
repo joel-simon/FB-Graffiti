@@ -51,9 +51,11 @@ convertAllImages = (base) ->
     new fbg.FbgImg(img, id, url)
 
 $ () ->
+  console.log 'Hello from Fracebook Graffiti'
   fbg.cache = new fbg.ImageCache()
   fbg.drawTools = new fbg.DrawTools()
   fbg.currentPage = location.href
   fbg.onPageLoad()
   trackChanges()
+
   

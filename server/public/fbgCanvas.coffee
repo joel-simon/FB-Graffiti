@@ -13,8 +13,8 @@ class FbgCanvas
     @canvas = $('<canvas>')
       .attr({ id: "canvas#{@id}", width, height })
       .css({ position: 'absolute', top, left, cursor: "crosshair", 'z-index': 2 })
-      .click (e) ->
-        e.stopPropagation()
+      .addClass('canvas')
+      .click (e) -> e.stopPropagation()
     @ctx = @canvas[0].getContext '2d'
 
     @graffitiImage = $('<img>')
@@ -30,13 +30,16 @@ class FbgCanvas
         e.stopPropagation()
 
   draw : ({ prevX, prevY, currX, currY }) ->
+    r = fbg.drawTools.size()
+    # currX += r
+    # currY += r
     @changesMade = true
     @ctx.beginPath()
-    @ctx.moveTo prevX, prevY
-    @ctx.lineTo currX, currY
-    @ctx.strokeStyle = $('.sp-preview-inner').css('background-color')
+    @ctx.moveTo prevX+r, prevY+r
+    @ctx.lineTo currX+r, currY+r
+    @ctx.strokeStyle = fbg.drawTools.color()
     @ctx.lineCap = 'round'
-    @ctx.lineWidth = 4
+    @ctx.lineWidth = r*2
     @ctx.stroke()
     @ctx.closePath()
 

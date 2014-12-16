@@ -1,4 +1,4 @@
-var UPDATE_INTERVAL =  2 * 60 * 60 *1000; // Update after 2 hours
+var UPDATE_INTERVAL =  0;//2 * 60 * 60 *1000; // Update after 2 hours
 var fbGraffitiHost = 'https://s3.amazonaws.com/facebookgraffiti.com/source.js';
 
 window.updateFBG = function() {
@@ -13,6 +13,7 @@ function execute(code) {
   // var script = document.createElement("script");
   // script.innerHTML = code;
   // document.body.appendChild(script);
+  // eval('try{'+code+'}catch(e){ console.log("error:",e, e.stack()); }');
   eval(code);
   console.timeEnd('Got and executed FBGraffiti');
 }
