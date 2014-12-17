@@ -47,6 +47,7 @@ class fbg.DrawTools
 
   show: () ->
     $('.rhcHeader').css('height', 40).prepend @container
+    @container.find('button').text('Hide graffiti')
     @updateCursor()
     @container.show()
 
