@@ -8,11 +8,16 @@ fbg.urlParser =
     src.match(/www.facebook.com\/photo.php?/) or 
     src.match(/www.facebook.com\/.*\/photos/)
   id : (src) -> src.match(/\/[0-9]+_([0-9]+)_[0-9]+/)
-#https://www.facebook.com/barackobama/photos/a.428653951748.228645.6815841748/10151878817796749/?type=1&theater
+  stupidCroppedPhoto: (src) -> src.match(/p\d+x\d+/)
+
+
 fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
+
+fbg.isCoverPhoto = (img) ->
+  img.parent().parent().attr('id') is 'fbProfileCover'
 
 # triggered anytime new dom is loaded.
 fbg.onPageLoad = () ->
@@ -42,8 +47,11 @@ trackChanges = () ->
 
 convertAllImages = (base) ->
   $(base).find('img').not('.hasGraffiti').not('.spotlight').each () ->
+    # return if fbg.urlParser.stupidCroppedPhoto(@src)?
+
     id = fbg.urlParser.id @src
     img = $(@)
+    return if fbg.isCoverPhoto img
     return unless id?
     id = id[1]
     url = fbg.cache.idToUrl id

@@ -5,8 +5,8 @@ class FbgImg
       position: 'absolute'
       'z-index': 3
       width: img.outerWidth()
-      height: img.outerHeight()
-
+      # height: img.outerHeight()
+    img.parent().css({'overflow':'hidden'})
     css.left = img.css('marginLeft') if img.css('marginLeft') != '0px'
     css.top = img.css('marginTop') if img.css('marginTop') != '0px'
 
