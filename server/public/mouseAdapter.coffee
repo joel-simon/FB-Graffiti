@@ -14,12 +14,15 @@ onMouse = (eventType, e) ->
   return if !fbg.canvas
   return if e.target != fbg.canvas.canvas[0]
   if eventType == 'down'
+
     prevX = currX
     prevY = currY
 
     currX = e.offsetX
     currY = e.offsetY
     flag = true;
+    fbg.canvas.getColor currX, currY, (err, rbg) ->
+      fbg.drawTools.setColor rbg
 
   if flag && eventType == 'up' || eventType == "out"
       flag = false

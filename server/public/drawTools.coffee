@@ -25,6 +25,9 @@ class fbg.DrawTools
     $('.stage').prepend $(@s)
     $(@s).show()
 
+  setColor: ({r, g, b}) ->
+    $('#custom').spectrum('set', "rgb(#{r}, #{g}, #{b})")
+
   color: () ->
     $('.sp-preview-inner').css('background-color')
 

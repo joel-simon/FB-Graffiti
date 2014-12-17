@@ -48,7 +48,6 @@ trackChanges = () ->
 convertAllImages = (base) ->
   $(base).find('img').not('.hasGraffiti').not('.spotlight').each () ->
     # return if fbg.urlParser.stupidCroppedPhoto(@src)?
-
     id = fbg.urlParser.id @src
     img = $(@)
     return if fbg.isCoverPhoto img
@@ -65,5 +64,3 @@ $ () ->
   fbg.currentPage = location.href
   fbg.onPageLoad()
   trackChanges()
-
-  
