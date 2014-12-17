@@ -1,17 +1,23 @@
 class fbg.DrawTools
   constructor: () ->
-    @s = '.sp-replacer,#brushRange'
     @selectorOpen = false
+
+    @container = $('<div>')
+      .css({ height: 30, margin: 4, position: 'absolute' })
+      .prependTo $(document.body)
+    
     $('<input type="range" id="brushRange" value="90">')
-        .css { position: 'absolute', 'z-index': 999, width: 60, left: 60 }
-        .prependTo $(document.body)
+        .css { width: 60, float: 'left' }
+        .prependTo @container
         .click (e) -> e.stopPropagation()
         .change () => @updateCursor()
+
     $("<input type='text'/>")
       .attr({ id:'custom' })
-      .prependTo $(document.body)
+      .prependTo @container
       .spectrum({ 
         color: "#000"
+        # allowEmpty: true
         change: (c) => @updateCursor()
         show: () => 
           @selectorOpen = true
@@ -19,17 +25,30 @@ class fbg.DrawTools
         hide: () =>
           @selectorOpen = false
           @updateCursor()
-        # allowEmpty: true
        })
+
+    graffitiVisible = true
+    $('<button id="toggleG">Hide Graffiti</button>')
+      .css { float: 'left', width: 80 }
+      .prependTo @container
+      .click () ->
+        if graffitiVisible
+          $(@).text('Show')
+          fbg.canvas.hide()
+        else
+          $(@).text('Hide graffiti')
+          fbg.canvas.show()
+        graffitiVisible = !graffitiVisible
     @hide()
 
   hide: () ->
-    $(@s).hide()
+    $('#custom').spectrum("hide");
+    @container.hide()
 
   show: () ->
+    $('.rhcHeader').css('height', 40).prepend @container
     @updateCursor()
-    $('.stage').prepend $(@s)
-    $(@s).show()
+    @container.show()
 
   setColor: ({r, g, b}) ->
     return unless @selectorOpen
@@ -37,7 +56,8 @@ class fbg.DrawTools
     # @updateCursor()
 
   color: () ->
-    $('.sp-preview-inner').css('background-color')
+    t = $('#custom').spectrum 'get'
+    if t? then t.toRgbString() else "rgba(255,0,0,0)"
 
   size: () ->
     parseInt($('#brushRange')[0]?.value) // 3
@@ -54,4 +74,8 @@ class fbg.DrawTools
     ctx.arc size, size, size, 0, 2 * Math.PI, false
     ctx.fillStyle = @color()
     ctx.fill()
+    ctx.lineWidth = 1
+    ctx.strokeStyle = '#000000'
+    ctx.stroke()
+
     $('.canvas').css { 'cursor':  'url(' + cursor.toDataURL() + '), auto' }

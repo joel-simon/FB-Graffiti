@@ -39,20 +39,24 @@ class FbgCanvas
     @ctx.stroke()
     @ctx.closePath()
 
-  addTo : (div) ->
-    # div.prepend @graffitiImage
+  addTo: (div) ->
     div.prepend @canvas
 
-  remove : () ->  
+  remove: () ->  
     if @changesMade
       img = @canvas[0].toDataURL()
       @postToServer { id : @id, img }, 'setImage'
       @addToOtherCopies img
 
     @canvas.remove()
-    # @graffitiImage.remove()
+    fbg.drawTools.hide()
     @img.removeClass 'hasCanvas'
     delete fbg.canvas
+
+  hide: () ->
+    @canvas.hide()
+  show: () ->
+    @canvas.show()
 
   postToServer: (data, url) ->
     $.ajax { type:'POST', url: "#{fbg.host}setImage", data }
@@ -100,7 +104,7 @@ class FbgCanvas
       buffer.width = @img.width()
       buffer.height = @img.height()
       ctx = buffer.getContext "2d"
-      ctx.drawImage repeat, 0, 0
+      ctx.drawImage repeat, 0, 0, @img.width(), @img.height()
       [r, g, b, a] = (ctx.getImageData x, y, 1, 1).data
       rbga = { r, g, b, a }
       cb null, rbga

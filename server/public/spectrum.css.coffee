@@ -364,7 +364,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 /* Replacer (the little preview div that shows up instead of the <input>) */
 .sp-replacer {
-    position: absolute;
+    # position: absolute;
+    float: left;
     z-index: 999;
     margin:0;
     overflow:hidden;
