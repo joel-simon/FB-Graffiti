@@ -31,8 +31,8 @@ class FbgCanvas
     r = fbg.drawTools.size()
     @changesMade = true
     @ctx.beginPath()
-    @ctx.moveTo prevX+r, prevY+r
-    @ctx.lineTo currX+r, currY+r
+    @ctx.moveTo prevX, prevY
+    @ctx.lineTo currX, currY
     @ctx.strokeStyle = fbg.drawTools.color()
     @ctx.lineCap = 'round'
     @ctx.lineWidth = r*2
@@ -42,7 +42,8 @@ class FbgCanvas
   addTo: (div) ->
     div.prepend @canvas
 
-  remove: () ->  
+  remove: () ->
+    @hide()
     if @changesMade
       img = @canvas[0].toDataURL()
       @postToServer { id : @id, img }, 'setImage'

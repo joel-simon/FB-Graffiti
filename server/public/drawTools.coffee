@@ -78,5 +78,4 @@ class fbg.DrawTools
     ctx.lineWidth = 1
     ctx.strokeStyle = '#000000'
     ctx.stroke()
-
-    $('.canvas').css { 'cursor':  'url(' + cursor.toDataURL() + '), auto' }
+    $('.canvas').css { 'cursor': "url(#{cursor.toDataURL()}) #{size} #{size}, auto" }
