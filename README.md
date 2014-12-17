@@ -4,6 +4,7 @@ FB-Graffiti
 
 
 ### TODO
+* Code cleanup
 * Generate smaller preview of each photo for faster loading.
 * Notifications
 	* When someone drew on one of your photos.
