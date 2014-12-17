@@ -87,9 +87,11 @@ class FbgCanvas
           new fbg.FbgImg(img, id, canvasImg)
 
   getColor: (x, y, cb) ->
-    console.log {x, y}
+    # console.log {x, y}
+    [r, g, b, a] =  @ctx.getImageData(x, y, 1, 1).data
+    return cb(null, { r, g, b, a }) if a is 255
+    
     src = @img[0].src
-    # console.log('src:', src);
     repeat = new Image    
     repeat.crossOrigin = "Anonymous"
     repeat.onload = () =>

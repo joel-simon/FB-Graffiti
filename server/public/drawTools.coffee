@@ -27,6 +27,7 @@ class fbg.DrawTools
 
   setColor: ({r, g, b}) ->
     $('#custom').spectrum('set', "rgb(#{r}, #{g}, #{b})")
+    @updateCursor()
 
   color: () ->
     $('.sp-preview-inner').css('background-color')
