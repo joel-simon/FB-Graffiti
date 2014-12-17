@@ -27,6 +27,7 @@ class FbgCanvas
         @ctx.drawImage @graffitiImage[0], 0, 0, width, height
 
   draw : ({ prevX, prevY, currX, currY }) ->
+    return if fbg.drawTools.selectorOpen
     r = fbg.drawTools.size()
     @changesMade = true
     @ctx.beginPath()
@@ -90,7 +91,7 @@ class FbgCanvas
     # console.log {x, y}
     [r, g, b, a] =  @ctx.getImageData(x, y, 1, 1).data
     return cb(null, { r, g, b, a }) if a is 255
-    
+
     src = @img[0].src
     repeat = new Image    
     repeat.crossOrigin = "Anonymous"

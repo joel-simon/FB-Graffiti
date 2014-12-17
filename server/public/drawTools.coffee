@@ -1,7 +1,7 @@
 class fbg.DrawTools
   constructor: () ->
     @s = '.sp-replacer,#brushRange'
-
+    @selectorOpen = false
     $('<input type="range" id="brushRange" value="90">')
         .css { position: 'absolute', 'z-index': 999, width: 60, left: 60 }
         .prependTo $(document.body)
@@ -13,6 +13,12 @@ class fbg.DrawTools
       .spectrum({ 
         color: "#000"
         change: (c) => @updateCursor()
+        show: () => 
+          @selectorOpen = true
+          $('.canvas').css { 'cursor': 'crosshair' }
+        hide: () =>
+          @selectorOpen = false
+          @updateCursor()
         # allowEmpty: true
        })
     @hide()
@@ -26,8 +32,9 @@ class fbg.DrawTools
     $(@s).show()
 
   setColor: ({r, g, b}) ->
+    return unless @selectorOpen
     $('#custom').spectrum('set', "rgb(#{r}, #{g}, #{b})")
-    @updateCursor()
+    # @updateCursor()
 
   color: () ->
     $('.sp-preview-inner').css('background-color')
