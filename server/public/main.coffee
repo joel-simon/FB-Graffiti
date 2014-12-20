@@ -66,3 +66,4 @@ $ () ->
   fbg.currentPage = location.href
   fbg.onPageLoad()
   trackChanges()
+  $( window ).resize () -> fbg.canvas?.resize()

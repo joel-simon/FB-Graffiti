@@ -32,6 +32,13 @@ class FbgCanvas
       if fbg.drawing and options.onCanvas and options.dragging
         @draw options
 
+  resize: () ->
+    width = @img.width()
+    height = @img.height()
+    @canvas.attr { width, height }
+    if @img.hasClass 'hasGraffiti'
+      @ctx.drawImage @graffitiImage[0], 0, 0, width, height
+    # @ctx.drawImage @graffitiImage[0]
 
   draw : ({ prevX, prevY, currX, currY }) ->
     return if fbg.drawTools.selectorOpen
