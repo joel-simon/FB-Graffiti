@@ -1,5 +1,7 @@
 window.fbg ?= {}
 fbg.host = 'https://fb-graffiti.com/'
+fbg.drawing = true
+fbg.showGraffiti = true
 
 fbg.urlParser = 
   userImage : (src) -> src.match(/(profile).*\/[0-9]+_([0-9]+)_[0-9]+/)

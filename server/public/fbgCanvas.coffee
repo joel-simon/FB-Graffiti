@@ -2,7 +2,6 @@ class FbgCanvas
   constructor : (@img, @id, url) ->
     @changesMade = false
     @img.addClass 'hasCanvas'
-    # @img.addClass 'hasGraffiti'
     @stage = $('.stage').first()
 
     top = "#{(@stage.height() - @img.height())//2}px"
@@ -10,6 +9,7 @@ class FbgCanvas
     width = @img.width()
     height = @img.height()
 
+    console.log width, height
     @canvas = $('<canvas>')
       .attr({ id: "canvas#{@id}", width, height })
       .css({ position: 'absolute', top, left, cursor: "crosshair", 'z-index': 2 })
@@ -25,6 +25,13 @@ class FbgCanvas
       .load () =>
         @img.addClass 'hasGraffiti'
         @ctx.drawImage @graffitiImage[0], 0, 0, width, height
+
+    @createImgCopy()
+    
+    fbg.mouse.addListener 'mousemove', (options) =>
+      if fbg.drawing and options.onCanvas and options.dragging
+        @draw options
+
 
   draw : ({ prevX, prevY, currX, currY }) ->
     return if fbg.drawTools.selectorOpen
@@ -63,8 +70,6 @@ class FbgCanvas
     $.ajax { type:'POST', url: "#{fbg.host}setImage", data }
 
   addToOtherCopies: (canvasImg) ->
-    # console.log 'adding to other copies', ".img"+@id
-    
     #if an existing graffiti image, repalce it
     width = @img.width()
     height= @img.height()
@@ -92,24 +97,26 @@ class FbgCanvas
         if _id[1] == id
           new fbg.FbgImg(img, id, canvasImg)
 
-  getColor: (x, y, cb) ->
-    # console.log {x, y}
-    [r, g, b, a] =  @ctx.getImageData(x, y, 1, 1).data
-    return cb(null, { r, g, b, a }) if a is 255
-
+  createImgCopy: () ->
     src = @img[0].src
-    repeat = new Image    
-    repeat.crossOrigin = "Anonymous"
-    repeat.onload = () =>
+    copy = new Image    
+    copy.crossOrigin = "Anonymous"
+    copy.onload = () =>
       buffer = document.createElement('canvas');
       buffer.width = @img.width()
       buffer.height = @img.height()
-      ctx = buffer.getContext "2d"
-      ctx.drawImage repeat, 0, 0, @img.width(), @img.height()
-      [r, g, b, a] = (ctx.getImageData x, y, 1, 1).data
-      rbga = { r, g, b, a }
-      cb null, rbga
-    repeat.src = src
+      @ctxCopy = buffer.getContext "2d"
+      @ctxCopy.drawImage copy, 0, 0, @img.width(), @img.height()
+    copy.src = src
+
+  getColor: (x, y) ->  
+    [r, g, b, a] =  @ctx.getImageData(x, y, 1, 1).data
+    return "rgb(#{r}, #{g}, #{b})" if a is 255
+
+    [r, g, b, a] = @ctxCopy.getImageData(x, y, 1, 1).data
+    "rgb(#{r}, #{g}, #{b})"
+
+    
 
 window.fbg ?= {}
 window.fbg.FbgCanvas = FbgCanvas

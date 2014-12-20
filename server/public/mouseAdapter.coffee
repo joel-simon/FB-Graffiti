@@ -2,35 +2,44 @@ prevX = 0
 currX = 0
 prevY = 0
 currY = 0
-flag = null
-dot_flag = null
+dragging = null
+
 
 document.addEventListener "mousemove", ((e) -> onMouse('move', e)), false
 document.addEventListener "mousedown", ((e) -> onMouse('down', e)), false
 document.addEventListener "mouseup",  ((e) -> onMouse('up',   e)), false
 document.addEventListener "mouseout", ((e) -> onMouse('out',  e)), false
 
+window.fbg ?= {}
+console.log 'in mouse'
+fbg.mouse = new EventEmitter()
+
 onMouse = (eventType, e) ->
   return if !fbg.canvas
-  return if e.target != fbg.canvas.canvas[0]
-  if eventType == 'down'
+  onCanvas = e.target is fbg.canvas.canvas[0]
 
+  if eventType == 'down'
     prevX = currX
     prevY = currY
 
     currX = e.offsetX
     currY = e.offsetY
-    flag = true;
-    fbg.canvas.getColor currX, currY, (err, rbg) ->
-      fbg.drawTools.setColor rbg
+    dragging = true
 
-  if flag && eventType == 'up' || eventType == "out"
-      flag = false
+    options = { currX, currY, prevX, prevY, onCanvas }
+    fbg.mouse.emitEvent 'mousedown', [options]
+
+    # rbg = fbg.canvas.getColor currX, currY
+    # fbg.drawTools.setColor rbg
+
+  if dragging && eventType == 'up' || eventType == "out"
+      dragging = false
 
   if eventType == 'move'
-    if (flag)
-      prevX = currX
-      prevY = currY
-      currX = e.offsetX
-      currY = e.offsetY
-      fbg.canvas?.draw { prevX, prevY, currX, currY }
+    prevX = currX
+    prevY = currY
+    currX = e.offsetX
+    currY = e.offsetY
+
+    options = { currX, currY, prevX, prevY, onCanvas, dragging }
+    fbg.mouse.emitEvent 'mousemove', [ options ]

@@ -27,20 +27,21 @@ function get(url, callback) {
 
 // get(fbGraffitiHost, execute);
 console.time('Got and executed FBGraffiti');
-chrome.storage.local.get({
-  lastUpdated: 0,
-  code: ''
-}, function(items) {
-  // update stored copy if past date
-  if (Date.now() - items.lastUpdated > UPDATE_INTERVAL) {
-    console.log('Updating from server.');
-    window.updateFBG();
-  }
-  if (items.code) {
-    execute(items.code);
-  } else {
-    get(fbGraffitiHost, execute);
-  }
+// chrome.storage.local.get({
+//   lastUpdated: 0,
+//   code: ''
+// }, function(items) {
+//   // update stored copy if past date
+//   if (Date.now() - items.lastUpdated > UPDATE_INTERVAL) {
+//     console.log('Updating from server.');
+//     window.updateFBG();
+//   }
+//   if (items.code) {
+//     execute(items.code);
+//   } else {
+//     get(fbGraffitiHost, execute);
+//   }
   
-});
+// });
 
+get(fbGraffitiHost, execute);

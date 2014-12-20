@@ -6,6 +6,23 @@ License: MIT
 ###
 
 style = """
+
+#dropper {
+    border-style: solid;
+    width: 32px;
+    height: 32px;
+    border-color: white;
+    border-width : 1px;
+}
+
+# #dropper:hover {
+#     border-color: black;
+# }
+
+#dropper:active {
+    border-color: black;
+}
+
 .sp-container {
     position:absolute;
     top:0;
