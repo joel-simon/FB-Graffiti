@@ -1,12 +1,12 @@
 db = require '../adapters/db'
 module.exports = (req, res) ->
   q = """
-      SELECT distinct on (id_url.id) id_url.id, id_url.url, events.post_time
-      FROM events, id_url
+      SELECT distinct on (graffiti.id) graffiti.id, graffiti.url, events.post_time
+      FROM events, graffiti
       WHERE 
-        id_url.id = events.id AND
-        id_url.url IS NOT NULL
-      order by id_url.id, post_time desc limit 5;
+        graffiti.id = events.id AND
+        graffiti.url IS NOT NULL
+      order by graffiti.id, post_time desc limit 5;
       """
   db.query q, [], (err, results) ->
     console.log err if err

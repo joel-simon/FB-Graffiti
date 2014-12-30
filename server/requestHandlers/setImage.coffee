@@ -53,9 +53,9 @@ done = ({ res, img, path, start, width, height, type, url }) ->
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400
     
-    q1a = 'UPDATE id_url set url = $2::text WHERE id = $1::text'
+    q1a = 'UPDATE graffiti set url = $2::text WHERE id = $1::text'
 
-    q1b = 'INSERT INTO id_url(id, url) VALUES ($1, $2)'
+    q1b = 'INSERT INTO graffiti(id, url) VALUES ($1, $2)'
 
     q2 = 'INSERT INTO events (time_taken, id, width, height, type)
           VALUES ($1,$2,$3,$4,$5)'
