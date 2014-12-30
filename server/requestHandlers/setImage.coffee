@@ -53,8 +53,8 @@ done = ({ res, img, path, start, width, height, type, url }) ->
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400
     
-    q1a = 'UPDATE graffiti set url = $2::text WHERE id = $1::text'
-    q1b = 'INSERT INTO graffiti(id, url) VALUES ($1, $2) WHERE NOT EXISTS (
+    q1 = 'UPDATE graffiti set url = $2::text WHERE id = $1::text'
+    q1 = 'INSERT INTO graffiti(id, url) VALUES ($1, $2) WHERE NOT EXISTS (
             select * from graffiti where id = $1)'
 
     q2 = 'INSERT INTO events (time_taken, id, width, height, type)
@@ -62,7 +62,7 @@ done = ({ res, img, path, start, width, height, type, url }) ->
 
     v1 = [ path.split('.')[0], url ]
     v2 = [time, path.split('.')[0], width, height, type ]
-    
+
     async.series [
       (cb) -> db.query q1, v1, cb
       (cb) -> db.query q2, v2, cb
