@@ -1,23 +1,31 @@
 html
   head
     title Fb Graffiti
+    //- style(type='text/css').
+    link(rel='stylesheet', href="/style.css")
   body
-    container.masonry
-    each img in imgList
-      .masonryImage.masonry-brick
-        img(src="https://s3.amazonaws.com/facebookGraffiti/"+img.id+".png")
-        img(src="https://www.facebook.com/photo.php?fbid="+img.id)
-   
-  //- script(src="./Masonry_files/jquery-1.7.1.min.js")
-  //- script(src="./Masonry_files/jquery.masonry.min.js")
-  //- script(type='text/javascript').
-  //-   $(function(){
-   
-  //-     var $container = $('#container');
-     
-  //-     $container.imagesLoaded( function(){
-  //-       $container.masonry({
-  //-         itemSelector : '.masonryImage'
-  //-       });
-  //-     }); 
-  //-   });
+    - var host="https://s3.amazonaws.com/facebookGraffiti/"
+    #container.clearfix
+      each img in imgList
+        .box.photo.col3
+          a(href="http://www.google.com", title="foobar")
+            img(src=host+img.id+".png", class="graffiti")
+            img(src=img.url)
+  
+          
+  
+  //- style(src="style.css")    
+  script(src="jquery-1.7.1.min.js")
+  script(src="jquery.masonry.min.js")
+  script(type='text/javascript').
+    $(function(){
+      var $container = $('#container');
+      $container.imagesLoaded( function(){
+        console.log('loaded')
+        //- $('#content').masonry('reload');
+        $container.masonry({
+          //- columnWidth: 400,
+          itemSelector : '.box'
+        });
+      }); 
+    });
