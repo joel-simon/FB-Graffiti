@@ -24,8 +24,8 @@ app.get '/browse', requestHandlers.browse
 app.get '/', (req, res) -> res.send 200, 'Hello'
 
 options =
-  key : fs.readFileSync './certs/fbg-key.pem', 'utf8'
-  cert : fs.readFileSync './certs/fbg-cert.pem', 'utf8'
+  key : fs.readFileSync './certs/fbg.key', 'utf8'
+  cert : fs.readFileSync './certs/fbg.pem', 'utf8'
 
 server = https.createServer(options, app).listen 443
 server.listen 443, () ->
