@@ -12,6 +12,16 @@ fbg.urlParser =
     src.match(/www.facebook.com\/.*\/photos/)
   id : (src) -> src.match(/\/[0-9]+_([0-9]+)_[0-9]+/)
   stupidCroppedPhoto: (src) -> src.match(/p\d+x\d+/)
+  owner: (url) ->
+    # Type A
+    # /photo.php?fbid=10204354908425219&set=t.100000157939878&type=1&theater
+    # /vtechvsa/photos/t.100000157939878/582035031943331/?type=1&theater
+    a = url.match(/t\.([0-9]+)/)
+    # Type B
+    # /photo.php?fbid=968579496490639&set=a.166770083338255.40807.100000157939878&type=1&theater
+    # /vtechvsa/photos/a.582032565276911.1073741910.292031957610308/582035031943331/?type=1&theater
+    b = url.match(/[0-9]+\.[0-9]+\.([0-9]+)/)
+    (a and a[1]) or (b and b[1]) or null
 
 fbg.get =
   mainImg : () -> $('.spotlight')
@@ -30,6 +40,7 @@ fbg.onPageLoad = () ->
   if onNewPage
     fbg?.canvas?.remove()
     if onPhotoPage
+      console.log 'Photo owner is', fbg.urlParser.owner(fbg.currentPage)
       fbg.get.faceBoxes().hide()
       mainImg = fbg.get.mainImg()
       id = fbg.urlParser.userContent(mainImg[0].src)[2]
