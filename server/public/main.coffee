@@ -1,6 +1,7 @@
 window.fbg ?= {}
 fbg.host = 'https://fb-graffiti.com/'
-fbg.drawing = true
+# fbg.host = 'https://localhost/'
+fbg.drawing = false
 fbg.showGraffiti = true
 
 fbg.urlParser = 
@@ -11,7 +12,6 @@ fbg.urlParser =
     src.match(/www.facebook.com\/.*\/photos/)
   id : (src) -> src.match(/\/[0-9]+_([0-9]+)_[0-9]+/)
   stupidCroppedPhoto: (src) -> src.match(/p\d+x\d+/)
-
 
 fbg.get =
   mainImg : () -> $('.spotlight')
@@ -61,6 +61,7 @@ convertAllImages = (base) ->
 
 $ () ->
   console.log 'Hello from Fracebook Graffiti'
+  fbg.mouse = new EventEmitter()
   fbg.cache = new fbg.ImageCache()
   fbg.drawTools = new fbg.DrawTools()
   fbg.currentPage = location.href

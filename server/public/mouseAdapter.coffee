@@ -12,7 +12,7 @@ document.addEventListener "mouseout", ((e) -> onMouse('out',  e)), false
 
 window.fbg ?= {}
 console.log 'in mouse'
-fbg.mouse = new EventEmitter()
+
 
 onMouse = (eventType, e) ->
   return if !fbg.canvas

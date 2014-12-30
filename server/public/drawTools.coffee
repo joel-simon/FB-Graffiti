@@ -9,6 +9,7 @@ class fbg.DrawTools
       .prependTo $(document.body)
     
     @selectors = $('<div>').css('float', 'left').appendTo @container
+    @selectors.hide()
 
     $('<input type="range" id="brushRange" value="90">')
         .css { width: 60, float: 'left' }
@@ -20,12 +21,9 @@ class fbg.DrawTools
       .prependTo @selectors
       .click () => 
         color = if @eyeDropping then 'white' else 'black'
-        # console.log color
         dropper.css 'border-color', color
         @eyeDropping = !@eyeDropping
         @updateCursor()
-      # .hover () -> 
-      #   dropper.css("border-color", "black")
 
     $("<input type='text'/>")
       .attr({ id:'custom' })
@@ -35,7 +33,6 @@ class fbg.DrawTools
         change: (c) => @updateCursor()
         show: () => 
           @selectorOpen = true
-          # $('.canvas').css { 'cursor': 'crosshair' }
         hide: () =>
           @selectorOpen = false
           @updateCursor()
@@ -53,7 +50,8 @@ class fbg.DrawTools
           fbg.canvas.show()
         fbg.showGraffiti = !fbg.showGraffiti
 
-    drawButton = $('<button id="toggleDrawing">Stop drawing</button>')
+    drawButton = $('<button id="toggleDrawing"></button>')
+      .text if fbg.drawing then 'Stop drawing.' else 'Draw'
       .css { float: 'left', width: 80 }
       .prependTo @container
       .click () =>
@@ -69,8 +67,8 @@ class fbg.DrawTools
         c = fbg.canvas.getColor currX, currY
         @setColor c
 
-    fbg.mouse.addListener 'mousedown', () =>
-      if @eyeDropping
+    fbg.mouse.addListener 'mousedown', ({onCanvas}) =>
+      if @eyeDropping and onCanvas
         dropper.trigger 'click'
     
     @hide()

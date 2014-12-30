@@ -43,10 +43,10 @@ exports.transaction = (main, cb) ->
     return cb err if err?
     client.query 'BEGIN', (err) ->
       process.nextTick () ->
-        main (err, results) ->
+        main client, (err, results) ->
           if err?
             rollback client, done
             cb err
           else
             client.query 'COMMIT', done
-            cb null
+            cb null, results

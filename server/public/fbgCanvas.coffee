@@ -9,7 +9,6 @@ class FbgCanvas
     width = @img.width()
     height = @img.height()
 
-    console.log width, height
     @canvas = $('<canvas>')
       .attr({ id: "canvas#{@id}", width, height })
       .css({ position: 'absolute', top, left, cursor: "crosshair", 'z-index': 2 })
@@ -59,8 +58,8 @@ class FbgCanvas
   remove: () ->
     @hide()
     if @changesMade
-      img = @canvas[0].toDataURL()
-      @postToServer { id : @id, img }, 'setImage'
+      img = @canvas[0].toDataURL() 
+      @postToServer img
       @addToOtherCopies img
 
     @canvas.remove()
@@ -73,8 +72,14 @@ class FbgCanvas
   show: () ->
     @canvas.show()
 
-  postToServer: (data, url) ->
-    $.ajax { type:'POST', url: "#{fbg.host}setImage", data }
+  postToServer: (img) ->
+    data =
+      id: @id
+      img: img
+      url: @img.attr 'src'
+    error = (XHR, err) ->
+      console.log "There was an error posting to server #{err}"
+    $.ajax { type:'POST', url: "#{fbg.host}setImage", data, error }
 
   addToOtherCopies: (canvasImg) ->
     #if an existing graffiti image, repalce it

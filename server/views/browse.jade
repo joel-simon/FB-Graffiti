@@ -1,0 +1,23 @@
+html
+  head
+    title Fb Graffiti
+  body
+    container.masonry
+    each img in imgList
+      .masonryImage.masonry-brick
+        img(src="https://s3.amazonaws.com/facebookGraffiti/"+img.id+".png")
+        img(src="https://www.facebook.com/photo.php?fbid="+img.id)
+   
+  //- script(src="./Masonry_files/jquery-1.7.1.min.js")
+  //- script(src="./Masonry_files/jquery.masonry.min.js")
+  //- script(type='text/javascript').
+  //-   $(function(){
+   
+  //-     var $container = $('#container');
+     
+  //-     $container.imagesLoaded( function(){
+  //-       $container.masonry({
+  //-         itemSelector : '.masonryImage'
+  //-       });
+  //-     }); 
+  //-   });

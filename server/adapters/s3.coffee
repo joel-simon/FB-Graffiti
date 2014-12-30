@@ -10,7 +10,7 @@ module.exports =
     s3.getObject params, callback
 
   putImage : ({ bucket, path, img }, callback) ->
-    console.log 'putImage', bucket, path
+    # console.log 'putImage', bucket, path
     params =
       Bucket: bucket
       Key: path
