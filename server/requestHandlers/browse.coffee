@@ -6,7 +6,7 @@ module.exports = (req, res) ->
       WHERE 
         graffiti.id = events.id AND
         graffiti.url IS NOT NULL
-      order by graffiti.id, post_time desc limit 5;
+      order by graffiti.id, post_time desc limit 25;
       """
   db.query q, [], (err, results) ->
     console.log err if err
