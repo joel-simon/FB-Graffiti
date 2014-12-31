@@ -16,7 +16,7 @@ flyout = $('<div>').attr({}).css({
 $('<iframe />', {
   name: 'myFrame'
   id:   'myFrame'
-  src: 'https://fb-graffiti.com/browse'
+  src: 'https://fb-graffiti.com/browse?u='+fbg.urlParser.myId()
 }).css({
   width: 410
   height: 500

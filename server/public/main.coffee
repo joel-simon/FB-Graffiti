@@ -12,6 +12,9 @@ fbg.urlParser =
     src.match(/www.facebook.com\/.*\/photos/)
   id : (src) -> src.match(/\/[0-9]+_([0-9]+)_[0-9]+/)
   stupidCroppedPhoto: (src) -> src.match(/p\d+x\d+/)
+  myId: () ->
+    s = $("img[id^=profile_pic_header]")[0].id
+    s?.match(/_([0-9]+)/)[1]
   owner: (url) ->
     # Type A
     # /photo.php?fbid=10204354908425219&set=t.100000157939878&type=1&theater
