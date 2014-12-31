@@ -8,20 +8,20 @@ jewelButton = $('<img>').attr({
 })
 
 flyout = $('<div>').attr({}).css({
-  width: 300
-  'min-height':100
   'z-index':1000
   position: 'absolute'
   'margin-top': 3
-  })
+  }).hide()
 
 $('<iframe />', {
   name: 'myFrame'
   id:   'myFrame'
   src: 'https://fb-graffiti.com/browse'
 }).css({
+  width: 410
+  height: 500
   position: 'relative'
-  left: -60
+  left: -200
 }).appendTo flyout
 
 div.append jewelButton

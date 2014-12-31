@@ -66,9 +66,6 @@ h3 {
   font-weight: bold;
 }
 
-h3, p, ul, ol, pre, dl {
-  margin-bottom: 1.0em;
-}
 
 em { font-style: italic; }
 strong { font-weight: bold; }
