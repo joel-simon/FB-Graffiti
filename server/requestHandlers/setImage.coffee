@@ -4,8 +4,8 @@ async = require 'async'
 images = require 'images'
 
 module.exports = (req, res) ->
-  { id, img, url } = req.body
-  if !id or !img or !url
+  { id, img, url, owner } = req.body
+  if !id or !img or !url or !owner
     console.log 'Invalid setImage post params:', req.body
     return res.send 400
 
@@ -19,15 +19,15 @@ module.exports = (req, res) ->
     options = { res, path, start, delta, data, url }
     if err then newImage options else existingImage options
 
-newImage = ({res, path, start, delta, url}) ->
+newImage = (options) ->
   console.log 'newImage', delta
-  type = 'new'
-  width = delta.width()
-  height = delta.height()
-  img = (delta).encode 'png'
-  done { res, img, path, start, width, height, type, url }
+  options.type = 'new'
+  options.width = delta.width()
+  options.height = delta.height()
+  options.img = (delta).encode 'png'
+  done options
 
-existingImage = ({res, path, start, delta, data, url }) ->
+existingImage = ({ res, path, start, delta, data, url, owner }) ->
   console.log 'Existing image'
   type = 'append'
   oldImg = images data.Body
@@ -44,9 +44,9 @@ existingImage = ({res, path, start, delta, data, url }) ->
     img = oldImg.draw(delta.size(oldWidth, oldHeight),0,0).encode("png")
   else
     img = oldImg.draw(delta,0,0).encode "png"
-  done { res, img, path, start, width, height, type, url }
+  done { res, img, path, start, width, height, type, url, owner }
 
-done = ({ res, img, path, start, width, height, type, url }) ->
+done = ({ res, img, path, start, width, height, type, url, owner }) ->
   time = (new Date().getTime()) - start
   s3.putImage { bucket: 'facebookGraffiti', img, path }, (err) ->
     if err?
@@ -54,12 +54,12 @@ done = ({ res, img, path, start, width, height, type, url }) ->
       return res.send 400
 
     q1 =  "UPDATE graffiti set url = $2::text WHERE id = $1::text;"
-    qfu = "INSERT INTO graffiti (id, url) SELECT '#{path.split('.')[0]}', '#{url}' WHERE NOT EXISTS (select 1 from graffiti where id = $1); "
+    qfu = "INSERT INTO graffiti (id, url, owner) SELECT '#{path.split('.')[0]}', '#{url}', '#{owner}' WHERE NOT EXISTS (select 1 from graffiti where id = $1); "
 
     q2 = 'INSERT INTO events (time_taken, id, width, height, type)
           VALUES ($1,$2,$3,$4,$5)'
 
-    v1 = [ path.split('.')[0], url ]
+    v1 = [ path.split('.')[0], url, owner ]
     v2 = [time, path.split('.')[0], width, height, type ]
 
     async.series [

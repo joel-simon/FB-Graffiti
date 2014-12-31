@@ -3,6 +3,7 @@ class FbgCanvas
     @changesMade = false
     @img.addClass 'hasCanvas'
     @stage = $('.stage').first()
+    @owner = fbg.urlParser.owner(fbg.currentPage)
 
     top = "#{(@stage.height() - @img.height())//2}px"
     left = "#{(@stage.width() - @img.width())//2}px"
@@ -77,6 +78,7 @@ class FbgCanvas
       id: @id
       img: img
       url: @img.attr 'src'
+      owner: @owner
     error = (XHR, err) ->
       console.log "There was an error posting to server #{err}"
     $.ajax { type:'POST', url: "#{fbg.host}setImage", data, error }
