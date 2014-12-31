@@ -40,7 +40,6 @@ fbg.onPageLoad = () ->
   if onNewPage
     fbg?.canvas?.remove()
     if onPhotoPage
-      console.log 'Photo owner is', fbg.urlParser.owner(fbg.currentPage)
       fbg.get.faceBoxes().hide()
       mainImg = fbg.get.mainImg()
       id = fbg.urlParser.userContent(mainImg[0].src)[2]

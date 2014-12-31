@@ -5,6 +5,8 @@ class FbgCanvas
     @stage = $('.stage').first()
     @owner = fbg.urlParser.owner(fbg.currentPage)
 
+    console.log 'owner', @owner
+
     top = "#{(@stage.height() - @img.height())//2}px"
     left = "#{(@stage.width() - @img.width())//2}px"
     width = @img.width()
