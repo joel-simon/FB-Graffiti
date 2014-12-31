@@ -550,9 +550,7 @@ h1 {
 label { 
     padding:0.4em 2em 0.4em 0; 
 }
-.toggle-btn-grp { 
-    margin:3px 0; 
-}
+
 .toggle-btn { 
     text-align:centre; 
     margin:5px 2px;
