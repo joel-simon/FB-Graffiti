@@ -3,16 +3,7 @@ html
     title Fb Graffiti
     //- style(type='text/css').
     link(rel='stylesheet', href="/style.css")
-    link(rel='stylesheet', href="/button.css")
   body
-    .toggle-btn-grp.joint-toggle
-      label(class="toggle-btn")
-        input(type="radio" name="group3")
-        | My Images
-      label(class="toggle-btn")
-        input(type="radio" name="group3")
-        | Global
-
     - var host="https://s3.amazonaws.com/facebookGraffiti/"
     #container.clearfix
       each img in imgList
