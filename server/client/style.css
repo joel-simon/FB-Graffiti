@@ -636,6 +636,11 @@ code .nd { color: #9FAD7E; } /* CSS pseudo selector */
 }
 
 
+@media screen and (max-width:600px) {
+  box { 
+    width: 80px;
+  }
+}
 
 .graffiti {
   position: absolute;
