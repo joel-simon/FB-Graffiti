@@ -6,9 +6,8 @@ images = require 'images'
 module.exports = (req, res) ->
   { id, img, url, owner } = req.body
   if !id or !img or !url or !owner
-    console.log 'Invalid setImage post params:', req.body
+    console.log 'Invalid setImage post params:', {id, img: !!img, url: !!url, owner}
     return res.send 400
-
   path = "#{id}.png"
 
   formatted = img.replace /^data:image\/\w+;base64,/, ""
@@ -16,7 +15,7 @@ module.exports = (req, res) ->
   start = new Date().getTime()
   
   s3.getImage { bucket: 'facebookGraffiti', path }, (err, data) ->
-    options = { res, path, start, delta, data, url }
+    options = { res, path, start, delta, data, url, owner }
     if err then newImage options else existingImage options
 
 newImage = (options) ->
@@ -48,23 +47,30 @@ existingImage = ({ res, path, start, delta, data, url, owner }) ->
 
 done = ({ res, img, path, start, width, height, type, url, owner }) ->
   time = (new Date().getTime()) - start
+  id = path.split('.')[0]
   s3.putImage { bucket: 'facebookGraffiti', img, path }, (err) ->
     if err?
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400
 
-    q1 =  "UPDATE graffiti set url = $2::text WHERE id = $1::text;"
+    console.log {id, img: !!img, url: !!url, owner}
+
+    q1 =  "UPDATE graffiti set url = $2::text, owner = $3 WHERE id = $1::text;"
     qfu = "INSERT INTO graffiti (id, url, owner) SELECT '#{path.split('.')[0]}', '#{url}', '#{owner}' WHERE NOT EXISTS (select 1 from graffiti where id = $1); "
 
     q2 = 'INSERT INTO events (time_taken, id, width, height, type)
           VALUES ($1,$2,$3,$4,$5)'
 
-    v1 = [ path.split('.')[0], url, owner ]
-    v2 = [time, path.split('.')[0], width, height, type ]
-
+    v1 = [ id, url, owner ]
+    v2 = [time, id, width, height, type ]
     async.series [
       (cb) -> db.query q1, v1, cb
       (cb) -> db.query qfu, [ path.split('.')[0] ], cb
       (cb) -> db.query q2, v2, cb
     ], (err) ->
-      console.log "Error querying: #{JSON.stringify(err)}" if err?
+      if err?
+        console.log "Error querying: #{JSON.stringify(err)}"
+        res.send 400
+      else
+        res.send 200
+
