@@ -52,8 +52,7 @@ done = ({ res, img, path, start, width, height, type, url, owner }) ->
     if err?
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400
-
-    q1 =  "UPDATE graffiti set url = $2::text WHERE id = $1::text;"
+    q1 =  "UPDATE graffiti set url = $2::text, owner = $3 WHERE id = $1::text;"
     qfu = "INSERT INTO graffiti (id, url, owner) SELECT '#{path.split('.')[0]}', '#{url}', '#{owner}' WHERE NOT EXISTS (select 1 from graffiti where id = $1); "
 
     q2 = 'INSERT INTO events (time_taken, id, width, height, type)
