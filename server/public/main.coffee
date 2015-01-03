@@ -73,11 +73,14 @@ convertAllImages = (base) ->
     new fbg.FbgImg(img, id, url)
 
 $ () ->
-  console.log 'Hello from Fracebook Graffiti'
+  console.log 'Page loaded'
   fbg.mouse = new EventEmitter()
-  fbg.cache = new fbg.ImageCache()
+
   fbg.drawTools = new fbg.DrawTools()
-  fbg.currentPage = location.href
-  fbg.onPageLoad()
-  trackChanges()
   $( window ).resize () -> fbg.canvas?.resize()
+
+console.log 'Starting'
+fbg.cache = new fbg.ImageCache()
+fbg.currentPage = location.href
+fbg.onPageLoad()
+trackChanges()

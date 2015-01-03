@@ -73,4 +73,3 @@ done = ({ res, img, path, start, width, height, type, url, owner }) ->
         res.send 400
       else
         res.send 200
-

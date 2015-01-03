@@ -6,15 +6,16 @@ html
   body
     - var host="https://s3.amazonaws.com/facebookGraffiti/"
     #container.clearfix
-      each img in imgList
-        .box.photo.col2
-          - var url = 'https://www.facebook.com/photo.php?fbid='+img.id
-          a(href=url, target="_blank", title="")
-            img(src=host+img.id+".png", class="graffiti")
-            img(src=img.url)
-          p=img.time
-  
-          
+      if imgList.length > 0
+        each img in imgList
+          .box.photo.col2
+            - var url = 'https://www.facebook.com/photo.php?fbid='+img.id
+            a(href=url, target="_blank", title="")
+              img(src=host+img.id+".png", class="graffiti")
+              img(src=img.url)
+            p=img.time
+      else
+        h2 None of your photos have graffiti.
   
   //- style(src="style.css")    
   script(src="jquery-1.7.1.min.js")
