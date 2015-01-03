@@ -7,7 +7,7 @@ html
     - var host="https://s3.amazonaws.com/facebookGraffiti/"
     #container.clearfix
       each img in imgList
-        .box.photo.col1
+        .box.photo.col2
           - var url = 'https://www.facebook.com/photo.php?fbid='+img.id
           a(href=url, target="_blank", title="")
             img(src=host+img.id+".png", class="graffiti")
