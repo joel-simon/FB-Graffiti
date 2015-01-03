@@ -8,7 +8,7 @@ $ () ->
     src : 'http://www.facebookGraffiti.com/sprayIcon.png'
   })
 
-  width = 410
+  width = 430
   left = -200
 
   flyout = $('<div>').attr({}).css({
@@ -27,6 +27,9 @@ $ () ->
         width: width
         'background-color': 'white'
         'z-index': 11
+        'border-left-style': 'solid'
+        'border-color': 'grey'
+        'border-width': 2
       }).appendTo flyout
 
   iframeCss = {
@@ -35,6 +38,7 @@ $ () ->
     position: 'relative'
     left: left
     'background-color': 'white'
+    'border-top-style': 'none'
   }
 
   myPhotos = $('<iframe />', {
@@ -65,6 +69,10 @@ $ () ->
 
   jewelButton.click () ->
     flyout.toggle()
+
+  $('.jewelButton').click () ->
+    flyout.hide()
+
   #   flyout = $('<div>').attr({
   #     id: 'fbNotificationsFlyout'
   #   }).addClass('__tw').addClass('uiToggleFlyout').addClass('_4xi1')
