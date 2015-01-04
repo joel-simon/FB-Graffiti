@@ -19,11 +19,12 @@ module.exports = (req, res) ->
     if err then newImage options else existingImage options
 
 newImage = (options) ->
+  delta = options.delta
   console.log 'newImage', delta
   options.type = 'new'
   options.width = delta.width()
   options.height = delta.height()
-  options.img = (delta).encode 'png'
+  options.img = delta.encode 'png'
   done options
 
 existingImage = ({ res, path, start, delta, data, url, owner }) ->
