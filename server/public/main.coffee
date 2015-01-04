@@ -26,6 +26,7 @@ fbg.urlParser =
     b = url.match(/[0-9]+\.[0-9]+\.([0-9]+)/)
     (a and a[1]) or (b and b[1]) or null
 
+
 fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')

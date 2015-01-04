@@ -1,13 +1,33 @@
 $ () ->
   data = {}
   parent = $('.notifCentered')
-  div = $('<div>').addClass('_4962')
+  # div = $('<div>').addClass('_4962')
+  
+  jewelSrc = 'http://www.facebookGraffiti.com/sprayIcon.png'
+  jewelSrcWhite = 
   visible = false
 
-  jewelButton = $('<img>').attr({
-    id : 'foo'
-    src : 'http://www.facebookGraffiti.com/sprayIcon.png'
+  jewelButton = $('<div>').addClass('_4962')
+  jewel = $('<img />', { src : jewelSrc })
+  jewelButton.append jewel
+
+  countBox = $('<div />').css({
+    position: 'absolute'
+    top: -4
+    left: 20
+    'background-color': 'red'
+    height: 20
+    'border-radius': 3
+    display: 'none'
   })
+  countText = $('<p>3</p>').css({
+    color: 'white'
+    margin: 4
+  })
+  countBox.append countText
+  jewelButton.append countBox
+
+  # $("<style type='text/css'> .redbold{ color:#f00; font-weight:bold;} </style>").appendTo("head");
 
   width = 430
   left = -200
@@ -18,19 +38,16 @@ $ () ->
     'margin-top': 3
     }).hide()
 
-
-  picker = $( '<div>
-    <h1>Graffiti on your photos.</h1>
-    </div>').css({
-        position: 'relative'
-        left: left
-        width: width
-        'background-color': 'white'
-        'z-index': 11
-        'border-left-style': 'solid'
-        'border-color': 'grey'
-        'border-width': 2
-      }).appendTo flyout
+  picker = $( '<div><h1>Graffiti on your photos.</h1></div>').css({
+    position: 'relative'
+    left: left
+    width: width
+    'background-color': 'white'
+    'z-index': 11
+    'border-left-style': 'solid'
+    'border-color': 'grey'
+    'border-width': 2
+  }).appendTo flyout
 
   iframeCss = {
     width: width
@@ -45,10 +62,8 @@ $ () ->
     src: 'https://fb-graffiti.com/browse?u='+fbg.urlParser.myId()
   }).css(iframeCss).appendTo flyout
 
-
-  div.append jewelButton
-  div.append flyout
-  parent.prepend div
+  jewelButton.append flyout
+  parent.prepend jewelButton
 
   $('#myG').click () ->
     myPhotos.show()
@@ -58,11 +73,12 @@ $ () ->
     global.show()
 
   jewelButton.click () ->
+    countBox.hide()
     if visible
-      jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
+      jewel.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
       flyout.hide()  
     else
-      jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIconWhite.png'}
+      jewel.attr {src: 'http://www.facebookGraffiti.com/sprayIconWhite.png'}
       flyout.show()
     visible = !visible
     
@@ -70,3 +86,18 @@ $ () ->
   $('.jewelButton').click () ->
     jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
     flyout.hide()
+
+  lastLogin = localStorage.getItem "FbgLastLogin" or 'Sat Jan 03 2015 23:24:39 GMT-0500 (EST)'
+  lastLogin = lastLogin.split(' ').join('_')
+  id = fbg.urlParser.myId()
+  host = 'https://localhost/'
+  localStorage.setItem "FbgLastLogin", new Date()
+  $.get "#{host}notifCount?id=#{id}&last=#{lastLogin}", (data) ->
+    if parseInt(data) > 0
+      countText.text data
+      countBox.show()
+
+
+
+  
+

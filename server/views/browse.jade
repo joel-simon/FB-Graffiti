@@ -23,6 +23,7 @@ html
   script(src="jquery.masonry.min.js")
   script(type='text/javascript').
     $(function(){
+
       var $container = $('#container');
       $container.imagesLoaded( function(){
         console.log('loaded')
@@ -33,16 +34,19 @@ html
         });
       }); 
       $('.button').click(function() {
-        post = $(this).parent()
-        console.log(post)
-        var url = 'https://fb-graffiti.com/clear'
-        //- var url = 'https://localhost/clear'
-        var data = { id: $(this).attr('id') }
-        post.fadeOut("slow", function() {
-          $container.masonry( 'remove', post );
-          $container.masonry();
-          alert('This graffiti has been deleted completely.')
-        });
-        $.post(url, data)
-      })
+        erase = confirm("Erase this completely? (cannot be undone)")
+        if (erase) {
+          post = $(this).parent()
+          console.log(post)
+          var url = 'https://fb-graffiti.com/clear'
+          //- var url = 'https://localhost/clear'
+          var data = { id: $(this).attr('id') }
+          post.fadeOut("slow", function() {
+            $container.masonry( 'remove', post );
+            $container.masonry();
+            alert('Graffiti has been laboriously scrubbed off.')
+          });
+          $.post(url, data)
+        }
+      });
     });

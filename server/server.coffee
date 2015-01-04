@@ -21,6 +21,7 @@ app.use (req, res, next) ->
 app.post '/setImage', requestHandlers.setImage
 app.post '/clear', requestHandlers.clear
 app.get '/browse', requestHandlers.browse
+app.get '/notifCount', requestHandlers.notifCount
 app.get '/', (req, res) -> res.send 200, 'Hello'
 
 options =
