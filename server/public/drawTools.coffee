@@ -4,6 +4,8 @@ class fbg.DrawTools
     @selectorOpen = false
     @eyeDropping = false
 
+    @stageUI = $('.snowliftPager,.stageActions')
+
     @container = $('<div>')
       .css({ height: 30, margin: 4, position: 'absolute', cursor: 'pointer' })
       .prependTo $(document.body)
@@ -28,7 +30,7 @@ class fbg.DrawTools
     $("<input type='text'/>")
       .attr({ id:'custom' })
       .prependTo @selectors
-      .spectrum({ 
+      .spectrum({
         color: "#000"
         change: (c) => @updateCursor()
         show: () => 
@@ -55,7 +57,12 @@ class fbg.DrawTools
       .css { float: 'left', width: 80 }
       .prependTo @container
       .click () =>
-        drawButton.text (if fbg.drawing then 'Draw' else 'Stop drawing.')
+        if fbg.drawing
+          @stageUI.show()
+          drawButton.text 'Draw'
+        else
+          @stageUI.hide()
+          drawButton.text 'Stop drawing.'
         @selectors.toggle()
         if !fbg.showGraffiti and fbg.drawing is false
           showGraffitiButton.trigger 'click'

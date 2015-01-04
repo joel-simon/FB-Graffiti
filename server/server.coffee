@@ -19,6 +19,7 @@ app.use (req, res, next) ->
   next()
 
 app.post '/setImage', requestHandlers.setImage
+app.post '/clear', requestHandlers.clear
 app.get '/browse', requestHandlers.browse
 app.get '/', (req, res) -> res.send 200, 'Hello'
 

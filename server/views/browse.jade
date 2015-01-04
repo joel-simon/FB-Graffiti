@@ -8,12 +8,13 @@ html
     #container.clearfix
       if imgList.length > 0
         each img in imgList
-          .box.photo.col1
+          .box.photo.col2
             - var url = 'https://www.facebook.com/photo.php?fbid='+img.id
             a(href=url, target="_blank", title="")
               img(src=host+img.id+".png", class="graffiti")
               img(src=img.url)
             p=img.time
+            button(id=img.id).button Erase graffiti
       else
         h2 None of your photos have graffiti.
   
@@ -33,4 +34,18 @@ html
           itemSelector : '.box'
         });
       }); 
+    
+      $('.button').click(function() {
+        post = $(this).parent()
+        console.log(post)
+        var url = 'https://fb-graffiti.com/clear'
+        var url = 'https://localhost/clear'
+        var data = { id: $(this).attr('id') }
+        post.fadeOut("slow", function() {
+          $container.masonry( 'remove', post );
+          $container.masonry();
+          alert('This graffiti has been deleted completely.')
+        });
+        $.post(url, data)
+      })
     });

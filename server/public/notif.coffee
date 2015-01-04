@@ -2,6 +2,7 @@ $ () ->
   data = {}
   parent = $('.notifCentered')
   div = $('<div>').addClass('_4962')
+  visible = false
 
   jewelButton = $('<img>').attr({
     id : 'foo'
@@ -18,9 +19,8 @@ $ () ->
     }).hide()
 
 
-  picker = $( '<div class="toggle-btn-grp joint-toggle">
-      <label id="myG" class="toggle-btn"><input type="radio" name="group3"/>My Images</label>
-      <label id="globalG" class="toggle-btn success"><input type="radio" name="group3"/>Global</label>
+  picker = $( '<div>
+    <h1>Graffiti on your photos.</h1>
     </div>').css({
         position: 'relative'
         left: left
@@ -43,22 +43,12 @@ $ () ->
 
   myPhotos = $('<iframe />', {
     src: 'https://fb-graffiti.com/browse?u='+fbg.urlParser.myId()
-  }).css(iframeCss).hide().appendTo flyout
-
-  global = $('<iframe />', {
-    src: 'https://fb-graffiti.com/browse'
   }).css(iframeCss).appendTo flyout
+
 
   div.append jewelButton
   div.append flyout
   parent.prepend div
-
-  $(".toggle-btn:not('.noscript') input[type=radio]").addClass("visuallyhidden")
-  $(".toggle-btn:not('.noscript') input[type=radio]").change () ->
-    if $(this).attr("name")
-        $(this).parent().addClass("success").siblings().removeClass("success")
-    else
-        $(this).parent().toggleClass("success")
 
   $('#myG').click () ->
     myPhotos.show()
@@ -68,13 +58,15 @@ $ () ->
     global.show()
 
   jewelButton.click () ->
-    flyout.toggle()
+    if visible
+      jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
+      flyout.hide()  
+    else
+      jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIconWhite.png'}
+      flyout.show()
+    visible = !visible
+    
 
   $('.jewelButton').click () ->
+    jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
     flyout.hide()
-
-  #   flyout = $('<div>').attr({
-  #     id: 'fbNotificationsFlyout'
-  #   }).addClass('__tw').addClass('uiToggleFlyout').addClass('_4xi1')
-  #   console.log flyout
-  #   div.append flyout
