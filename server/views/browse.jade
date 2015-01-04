@@ -36,7 +36,7 @@ html
         post = $(this).parent()
         console.log(post)
         var url = 'https://fb-graffiti.com/clear'
-        var url = 'https://localhost/clear'
+        //- var url = 'https://localhost/clear'
         var data = { id: $(this).attr('id') }
         post.fadeOut("slow", function() {
           $container.masonry( 'remove', post );
