@@ -4,6 +4,7 @@ moment = require 'moment'
 module.exports = (req, res) ->
   { id, last } = req.query
   last = moment(last.replace(/_/g , ' ')).format()
+  # console.log id, last
   q = "select COUNT(*) from (
         SELECT DISTINCT(graffiti.id)
         FROM events, graffiti

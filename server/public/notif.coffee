@@ -87,12 +87,11 @@ $ () ->
     jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
     flyout.hide()
 
-  lastLogin = localStorage.getItem "FbgLastLogin" or 'Sat Jan 03 2015 23:24:39 GMT-0500 (EST)'
-  lastLogin = lastLogin.split(' ').join('_')
+  lastLogin = localStorage.getItem("FbgLastLogin") or 'Sat Jan 03 2015 23:24:39 GMT-0500 (EST)'
+  lastLogin = lastLogin?.split(' ').join('_')
   id = fbg.urlParser.myId()
-  host = 'https://localhost/'
   localStorage.setItem "FbgLastLogin", new Date()
-  $.get "#{host}notifCount?id=#{id}&last=#{lastLogin}", (data) ->
+  $.get "#{fbg.host}notifCount?id=#{id}&last=#{lastLogin}", (data) ->
     if parseInt(data) > 0
       countText.text data
       countBox.show()

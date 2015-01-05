@@ -1111,7 +1111,7 @@
                     if (!method) {
                         throw new Error( "Spectrum: no such method: '" + opts + "'" );
                     }
-                    console.log(opts);
+                    // console.log(opts);
                     if (opts == "get") {
                         returnValue = spect.get();
                     }
