@@ -4,6 +4,7 @@ app = express()
 fs = require 'fs'
 requestHandlers = require './requestHandlers'
 bodyParser = require 'body-parser'
+extensionKey = 'chrome-extension://ipciijndfkddclgblffimljohjmhemak'
 
 app.use bodyParser limit: '20mb'
 app.set 'views', "#{__dirname}/views"
@@ -12,7 +13,7 @@ app.use express.static(__dirname + '/client')
 
 app.use (req, res, next) ->
   res.header "Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"
-  res.setHeader 'Access-Control-Allow-Origin', 'chrome-extension://kghggnemnbblgfdijmkollcjacjdapmp'
+  res.setHeader 'Access-Control-Allow-Origin', extensionKey
   res.setHeader 'Access-Control-Allow-Methods', 'GET, POST'
   res.setHeader 'Access-Control-Allow-Headers', 'X-Requested-With,content-type'
   res.setHeader 'Access-Control-Allow-Credentials', true
