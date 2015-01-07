@@ -5,8 +5,9 @@ images = require 'images'
 
 module.exports = (req, res) ->
   { id, img, url, owner } = req.body
-  if !id or !img or !url or !owner
-    console.log 'Invalid setImage post params:', {id, img: !!img, url: !!url, owner}
+  owner ?= null
+  if !id or !img or !url
+    console.log 'Invalid setImage post params:', { id, img: !!img, url: !!url }
     return res.send 400
   path = "#{id}.png"
 
