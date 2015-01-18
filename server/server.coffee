@@ -4,7 +4,7 @@ app = express()
 fs = require 'fs'
 requestHandlers = require './requestHandlers'
 bodyParser = require 'body-parser'
-extensionKey = 'chrome-extension://ipciijndfkddclgblffimljohjmhemak'
+extensionKey = 'chrome-extension://cmnchaikmnbbceccglncolgmbheoiehp'
 
 app.use bodyParser limit: '20mb'
 app.set 'views', "#{__dirname}/views"
