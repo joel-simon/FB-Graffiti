@@ -13,7 +13,7 @@ class fbg.DrawTools
     @selectors = $('<div>').css('float', 'left').appendTo @container
     @selectors.hide()
 
-    $('<input type="range" id="brushRange" value="90">')
+    $('<input type="range" id="brushRange" value="40">')
         .css { width: 60, float: 'left' }
         .prependTo @selectors
         .click (e) -> e.stopPropagation()
@@ -60,6 +60,7 @@ class fbg.DrawTools
         if fbg.drawing
           @stageUI.show()
           drawButton.text 'Draw'
+          fbg.canvas.postToServer()
         else
           @stageUI.hide()
           drawButton.text 'Stop drawing.'
@@ -95,14 +96,11 @@ class fbg.DrawTools
 
   color: () ->
     t = $('#custom').spectrum 'get'
+    console.log t.getBrightness()
     if t? then t.toRgbString() else "rgba(255, 0, 0, 0)"
 
   size: () ->
-    parseInt($('#brushRange')[0]?.value) // 3
-
-  # mouseMove: (x, y) ->
-  #   if @eyeDropping
-  #     @updateCursor(fbg.canvas.getColor x, y)
+    (parseInt($('#brushRange')[0]?.value) / 3)+2
 
   updateCursor: (color) ->
     if !fbg.drawing
@@ -110,20 +108,19 @@ class fbg.DrawTools
     else if @eyeDropping
       $('.canvas').css { 'cursor': 'crosshair' }
     else
-      color ?= @color()
-      # console.log 'udateCursor', color
       cursor = document.createElement 'canvas'
       ctx = cursor.getContext '2d'
-
+      color = $('#custom').spectrum('get')
       size = @size()
+      console.log size
       cursor.width = size*2
       cursor.height = size*2
 
       ctx.beginPath()
       ctx.arc size, size, size, 0, 2 * Math.PI, false
-      ctx.fillStyle = color
+      ctx.fillStyle = color.toRgbString()
       ctx.fill()
       ctx.lineWidth = 1
-      ctx.strokeStyle = '#000000'
+      ctx.strokeStyle = if color.getBrightness() > 100 then '#000000' else '#FFFFFF'
       ctx.stroke()
       $('.canvas').css { 'cursor': "url(#{cursor.toDataURL()}) #{size} #{size}, auto" }

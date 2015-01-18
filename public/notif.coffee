@@ -1,10 +1,9 @@
 $ () ->
   data = {}
   parent = $('.notifCentered')
-  # div = $('<div>').addClass('_4962')
   
-  jewelSrc = 'http://www.facebookGraffiti.com/sprayIcon.png'
-  jewelSrcWhite = 
+  jewelSrc = fbg.imgHost+'sprayIcon.png'
+  jewelSrcWhite = fbg.imgHost+'sprayIconWhite.png'
   visible = false
 
   jewelButton = $('<div>').addClass('_4962')
@@ -59,7 +58,7 @@ $ () ->
   }
 
   myPhotos = $('<iframe />', {
-    src: 'https://fb-graffiti.com/browse?u='+fbg.urlParser.myId()
+    src: fbg.host+'browse?u='+fbg.urlParser.myId()
   }).css(iframeCss).appendTo flyout
 
   jewelButton.append flyout
@@ -75,16 +74,16 @@ $ () ->
   jewelButton.click () ->
     countBox.hide()
     if visible
-      jewel.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
+      jewel.attr {src: jewelSrc}
       flyout.hide()  
     else
-      jewel.attr {src: 'http://www.facebookGraffiti.com/sprayIconWhite.png'}
+      jewel.attr {src: jewelSrcWhite}
       flyout.show()
     visible = !visible
     
 
   $('.jewelButton').click () ->
-    jewelButton.attr {src: 'http://www.facebookGraffiti.com/sprayIcon.png'}
+    jewelButton.attr {src: jewelSrc}
     flyout.hide()
 
   lastLogin = localStorage.getItem("FbgLastLogin") or 'Sat Jan 03 2015 23:24:39 GMT-0500 (EST)'

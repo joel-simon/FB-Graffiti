@@ -3,7 +3,7 @@
 
   "name": "FB Graffiti",
   "description": "Facebook walls are now open to graffiti.",
-  "version": "2.0.5",
+  "version": "2.0.8",
 
   "permissions": [
     "tabs", "https://www.facebook.com/*" ,"storage"

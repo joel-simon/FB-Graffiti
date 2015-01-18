@@ -1,4 +1,4 @@
-class FbgCanvas
+class fbg.FbgCanvas
   constructor : (@img, @id, url) ->
     @changesMade = false
     @img.addClass 'hasCanvas'
@@ -61,7 +61,7 @@ class FbgCanvas
   remove: () ->
     @hide()
     if @changesMade
-      img = @canvas[0].toDataURL() 
+      img = @canvas[0].toDataURL()
       @postToServer img
       @addToOtherCopies img
 
@@ -76,6 +76,7 @@ class FbgCanvas
     @canvas.show()
 
   postToServer: (img) ->
+    img ?= @canvas[0].toDataURL()
     data =
       id: @id
       img: img
@@ -86,10 +87,9 @@ class FbgCanvas
     $.ajax { type:'POST', url: "#{fbg.host}setImage", data, error }
 
   addToOtherCopies: (canvasImg) ->
-    #if an existing graffiti image, repalce it
     width = @img.width()
     height= @img.height()
-    if @img.hasClass 'hasGraffiti'
+    if @img.hasClass 'hasGraffiti' #if tbere is an existing graffiti image
       newImageCanvas = $('<canvas>').attr { width, height }
       ctx = newImageCanvas[0].getContext('2d')
       # ctx.drawImage @graffitiImage[0], 0, 0, width, height
@@ -97,13 +97,12 @@ class FbgCanvas
 
       newImage = newImageCanvas[0].toDataURL()
       fbg.cache.add @id, newImage
-
+      # console.log 'new image is', newImage
       $(".img"+@id).not('.spotlight').each () ->
         img = $(this)
         img.attr({ src: newImage })
 
-    else #if image currently has no graffiti then add it
-      # console.log 'hasNoGraffiti'
+    else #if first graffiti on image
       fbg.cache.add @id, canvasImg
       id = @id
       $(document.body).find('img').not('.hasGraffiti').not('.spotlight').each () ->
@@ -131,8 +130,3 @@ class FbgCanvas
 
     [r, g, b, a] = @ctxCopy.getImageData(x, y, 1, 1).data
     "rgb(#{r}, #{g}, #{b})"
-
-    
-
-window.fbg ?= {}
-window.fbg.FbgCanvas = FbgCanvas

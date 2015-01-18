@@ -1,6 +1,5 @@
-window.fbg ?= {}
 fbg.host = 'https://fb-graffiti.com/'
-# fbg.host = 'https://localhost/'
+fbg.imgHost = 'http://fbgraffiti.com/extensionimages/'
 fbg.drawing = false
 fbg.showGraffiti = true
 
@@ -76,7 +75,6 @@ convertAllImages = (base) ->
 $ () ->
   # console.log 'Page loaded'
   fbg.mouse = new EventEmitter()
-
   fbg.drawTools = new fbg.DrawTools()
   $( window ).resize () -> fbg.canvas?.resize()
 

@@ -1,5 +1,5 @@
 var UPDATE_INTERVAL =  0;//2 * 60 * 60 *1000; // Update after 2 hours
-var fbGraffitiHost = 'https://s3.amazonaws.com/facebookgraffiti.com/';
+var fbGraffitiHost = 'https://s3.amazonaws.com/fbgsource/';
 var source = fbGraffitiHost + 'source.js'
 
 window.updateFBG = function() {
@@ -15,6 +15,7 @@ function execute(code) {
   // script.innerHTML = code;
   // document.body.appendChild(script);
   // eval('try{'+code+'}catch(e){ console.log("error:",e, e.stack()); }');
+  eval('window.fbg = {};')
   eval(code);
   console.timeEnd('Got and executed FBGraffiti');
 }
@@ -26,7 +27,6 @@ function get(url, callback) {
   x.send();
 }
 
-// get(fbGraffitiHost, execute);
 console.time('Got and executed FBGraffiti');
 // chrome.storage.local.get({
 //   lastUpdated: 0,
