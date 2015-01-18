@@ -76,6 +76,7 @@ class fbg.FbgCanvas
     @canvas.show()
 
   postToServer: (img) ->
+    return unless @changesMade
     img ?= @canvas[0].toDataURL()
     data =
       id: @id
