@@ -1,48 +1,42 @@
-var UPDATE_INTERVAL =  0;//2 * 60 * 60 *1000; // Update after 2 hours
+var UPDATE_INTERVAL =  30 * 60 * 1000; // Update after 30 minutes
 var fbGraffitiHost = 'https://s3.amazonaws.com/fbgsource/';
 var source = fbGraffitiHost + 'source.js'
+console.time('Executed FBGraffiti');
 
 window.updateFBG = function() {
-  get(fbGraffitiHost, function(code) {
+  get(source, function(code) {
     if (!code) return console.log("Failed to get from source");
-    console.log('Got fresh code.');
     chrome.storage.local.set({ lastUpdated: Date.now(), code: code });
   });
 }
 
 function execute(code) {
-  // var script = document.createElement("script");
-  // script.innerHTML = code;
-  // document.body.appendChild(script);
-  // eval('try{'+code+'}catch(e){ console.log("error:",e, e.stack()); }');
   eval('window.fbg = {};')
   eval(code);
-  console.timeEnd('Got and executed FBGraffiti');
+  console.timeEnd('Executed FBGraffiti');
 }
 
 function get(url, callback) {
+  console.log('Fetching fresh code.');
   var x = new XMLHttpRequest();
-  x.onload = x.onerror = function() { callback(x.responseText); };
+  x.onload = function() { callback(x.responseText); };
+  x.onerror = function() { callback(null); };
   x.open('GET', url);
   x.send();
 }
 
-console.time('Got and executed FBGraffiti');
-// chrome.storage.local.get({
-//   lastUpdated: 0,
-//   code: ''
-// }, function(items) {
-//   // update stored copy if past date
-//   if (Date.now() - items.lastUpdated > UPDATE_INTERVAL) {
-//     console.log('Updating from server.');
-//     window.updateFBG();
-//   }
-//   if (items.code) {
-//     execute(items.code);
-//   } else {
-//     get(fbGraffitiHost, execute);
-//   }
-  
-// });
-
-get(source, execute);
+chrome.storage.local.get({
+  lastUpdated: 0,
+  code: ''
+}, function(items) {
+  // update stored copy if past date
+  if (Date.now() - items.lastUpdated > UPDATE_INTERVAL) {
+    console.log('Updating from server.');
+    window.updateFBG();
+  }
+  if (items.code) {
+    execute(items.code);
+  } else {
+    get(source, execute);
+  }
+});
