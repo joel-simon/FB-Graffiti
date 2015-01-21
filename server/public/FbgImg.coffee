@@ -7,8 +7,10 @@ class FbgImg
       width: img.outerWidth()
       # height: img.outerHeight()
     img.parent().css({'overflow':'hidden'})
-    css.left = img.css('marginLeft') if img.css('marginLeft') != '0px'
-    css.top = img.css('marginTop') if img.css('marginTop') != '0px'
+    css.left = img.css('left') if img.css('left') != '0px'
+    css.top = img.css('top') if img.css('top') != '0px'
+    css.marginLeft = img.css('marginLeft') if img.css('marginLeft') != '0px'
+    css.marginTop = img.css('marginTop') if img.css('marginTop') != '0px'
 
     domElem = $('<img>').attr { src: url }
     .addClass 'img'+key
