@@ -65,7 +65,7 @@ convertAllImages = (base) ->
     # return if fbg.urlParser.stupidCroppedPhoto(@src)?
     id = fbg.urlParser.id @src
     img = $(@)
-    return if fbg.isCoverPhoto img
+    # return if fbg.isCoverPhoto img
     return unless id?
     id = id[1]
     url = fbg.cache.idToUrl id

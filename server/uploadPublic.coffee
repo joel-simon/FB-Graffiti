@@ -3,7 +3,7 @@ AWS.config.loadFromPath __dirname+'/config.json'
 s3 = new AWS.S3()
 
 isDev = process.argv[2] is '-d'
-
+console.log {isDev}
 require('./public/').get (err, src) ->
   return console.log err if err
   params =

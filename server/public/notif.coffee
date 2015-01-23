@@ -86,16 +86,13 @@ $ () ->
     jewelButton.attr {src: jewelSrc}
     flyout.hide()
 
-  lastLogin = localStorage.getItem("FbgLastLogin") or 'Sat Jan 03 2015 23:24:39 GMT-0500 (EST)'
-  lastLogin = lastLogin?.split(' ').join('_')
-  id = fbg.urlParser.myId()
+  console.log 'Last login', localStorage.getItem("FbgLastLogin")
+  lastLogin = localStorage.getItem("FbgLastLogin")
   localStorage.setItem "FbgLastLogin", new Date()
-  $.get "#{fbg.host}notifCount?id=#{id}&last=#{lastLogin}", (data) ->
-    if parseInt(data) > 0
-      countText.text data
-      countBox.show()
-
-
-
-  
-
+  if lastLogin?
+    lastLogin = lastLogin?.split(' ').join('_')
+    id = fbg.urlParser.myId()
+    $.get "#{fbg.host}notifCount?id=#{id}&last=#{lastLogin}", (data) ->
+      if parseInt(data) > 0
+        countText.text data
+        countBox.show()

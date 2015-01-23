@@ -53,7 +53,7 @@ class fbg.DrawTools
         fbg.showGraffiti = !fbg.showGraffiti
 
     drawButton = $('<button id="toggleDrawing"></button>')
-      .text if fbg.drawing then 'Stop drawing.' else 'Draw'
+      .text if fbg.drawing then 'Stop' else 'Draw'
       .css { float: 'left', width: 80 }
       .prependTo @container
       .click () =>
@@ -63,7 +63,7 @@ class fbg.DrawTools
           fbg.canvas.postToServer()
         else
           @stageUI.hide()
-          drawButton.text 'Stop drawing.'
+          drawButton.text 'Stop'
         @selectors.toggle()
         if !fbg.showGraffiti and fbg.drawing is false
           showGraffitiButton.trigger 'click'
