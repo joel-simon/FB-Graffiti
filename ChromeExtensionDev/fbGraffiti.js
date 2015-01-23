@@ -10,7 +10,7 @@ window.updateFBG = function() {
 }
 
 function execute(code) {
-  eval('window.fbg = {};')
+  eval('window.fbg = { host = "https://localhost/" };')
   eval(code);
   console.timeEnd('Executed FBGraffiti');
 }

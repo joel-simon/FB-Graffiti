@@ -65,10 +65,24 @@ class fbg.DrawTools
           @stageUI.hide()
           drawButton.text 'Stop'
         @selectors.toggle()
+        reportButton.toggle()
         if !fbg.showGraffiti and fbg.drawing is false
           showGraffitiButton.trigger 'click'
         fbg.drawing = !fbg.drawing
         @updateCursor()
+
+    reportButton = $('<button id="report">Report</button>')
+      .css { float: 'left', width: 80 }
+      .appendTo @container
+      .click () =>
+        text = 'Does this graffiti contain any:
+                abuse, harrasment or egregiously offensive material?'
+        report = confirm text
+        if report
+          data = { id: fbg.canvas.id }
+          $.ajax { type:'POST', url: "#{fbg.host}report", data }
+          alert 'It will be evaluated and potentially removed, thanks.'
+
 
     fbg.mouse.addListener 'mousemove', ({currX, currY, onCanvas}) =>
       if @eyeDropping and onCanvas

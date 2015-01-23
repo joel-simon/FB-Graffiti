@@ -17,4 +17,3 @@ module.exports = (req, res) ->
     if err?
       res.send 400
     res.send 200, result.rows[0].count
-    

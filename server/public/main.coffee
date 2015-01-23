@@ -1,4 +1,4 @@
-fbg.host = 'https://fb-graffiti.com/'
+fbg.host ?= 'https://fb-graffiti.com/'
 fbg.imgHost = 'http://fbgraffiti.com/extensionimages/'
 fbg.drawing = false
 fbg.showGraffiti = true
