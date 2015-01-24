@@ -4,6 +4,7 @@ class fbg.FbgCanvas
     @img.addClass 'hasCanvas'
     @stage = $('.stage').first()
     @owner = fbg.urlParser.owner(fbg.currentPage)
+    @history = []
 
     console.log 'owner', @owner
 
@@ -29,10 +30,27 @@ class fbg.FbgCanvas
         @ctx.drawImage @graffitiImage[0], 0, 0, width, height
 
     @createImgCopy()
-    
-    fbg.mouse.addListener 'mousemove', (options) =>
-      if fbg.drawing and options.onCanvas and options.dragging
-        @draw options
+
+  saveState: () ->
+    @history.push @canvas[0].toDataURL()
+    fbg.drawTools.undoButton.prop "disabled",false
+
+  undo: () ->
+    restore_state = @history.pop()
+    return unless restore_state?
+    img = new Image
+    console.log 'restoring to', restore_state
+    w = @canvas[0].width
+    h = @canvas[0].height
+    if @history.length == 0
+      @changesMade = false
+    img.onload = () =>
+      console.log 'loaded!'
+      @ctx.clearRect 0, 0, w, h
+      @ctx.drawImage img, 0, 0, w, h
+    img.src = restore_state
+
+    null
 
   resize: () ->
     width = @img.width()
@@ -44,8 +62,9 @@ class fbg.FbgCanvas
 
   draw : ({ prevX, prevY, currX, currY }) ->
     return if fbg.drawTools.selectorOpen
-    r = fbg.drawTools.size()
     @changesMade = true
+    
+    r = fbg.drawTools.size()
     @ctx.beginPath()
     @ctx.moveTo prevX, prevY
     @ctx.lineTo currX, currY

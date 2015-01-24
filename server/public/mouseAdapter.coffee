@@ -11,8 +11,6 @@ document.addEventListener "mouseup",  ((e) -> onMouse('up',   e)), false
 document.addEventListener "mouseout", ((e) -> onMouse('out',  e)), false
 
 window.fbg ?= {}
-console.log 'in mouse'
-
 
 onMouse = (eventType, e) ->
   return if !fbg.canvas
@@ -29,11 +27,10 @@ onMouse = (eventType, e) ->
     options = { currX, currY, prevX, prevY, onCanvas }
     fbg.mouse.emitEvent 'mousedown', [options]
 
-    # rbg = fbg.canvas.getColor currX, currY
-    # fbg.drawTools.setColor rbg
-
-  if dragging && eventType == 'up' || eventType == "out"
-      dragging = false
+  if dragging && eventType == 'up' || dragging && eventType == "out"
+    console.log 'emitEvent mouseup'
+    fbg.mouse.emitEvent 'mouseup', [ { dragging } ]
+    dragging = false
 
   if eventType == 'move'
     prevX = currX

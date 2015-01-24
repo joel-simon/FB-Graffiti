@@ -24,6 +24,7 @@ app.post '/setImage', requestHandlers.setImage
 app.post '/clear', requestHandlers.clear
 app.post '/report', requestHandlers.report
 app.get '/browse', requestHandlers.browse
+app.get '/browseReported', requestHandlers.browseReported
 app.get '/notifCount', requestHandlers.notifCount
 app.get '/stats', requestHandlers.stats
 app.get '/', (req, res) -> res.send 200, 'Hello'

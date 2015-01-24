@@ -8,19 +8,18 @@ class fbg.DrawTools
 
     @container = $('<div>')
       .css({ height: 30, margin: 4, position: 'absolute', cursor: 'pointer' })
-      .prependTo $(document.body)
     
-    @selectors = $('<div>').css('float', 'left').appendTo @container
+    @selectors = $('<div>').css 'float', 'left'
+    utilities = $('<div>').css 'float', 'left'
     @selectors.hide()
 
-    $('<input type="range" id="brushRange" value="40">')
-        .css { width: 60, float: 'left' }
-        .prependTo @selectors
-        .click (e) -> e.stopPropagation()
-        .change () => @updateCursor()
+    rangePicker = $('<input type="range" id="brushRange" value="40">')
+      .css { width: 60, float: 'left' }
+      .click (e) -> e.stopPropagation()
+      .change () => @updateCursor()
 
     dropper = $('<img>').attr { id: 'dropper', src: 'http://simpleicon.com/wp-content/uploads/eyedropper-64x64.png' }
-      .prependTo @selectors
+      .css { float: 'left' }
       .click () => 
         color = if @eyeDropping then 'white' else 'black'
         dropper.css 'border-color', color
@@ -29,6 +28,7 @@ class fbg.DrawTools
 
     $("<input type='text'/>")
       .attr({ id:'custom' })
+      .css { float: 'left' }
       .prependTo @selectors
       .spectrum({
         color: "#000"
@@ -42,7 +42,6 @@ class fbg.DrawTools
 
     showGraffitiButton = $('<button id="toggleG">Hide Graffiti</button>')
       .css { float: 'left', width: 80 }
-      .prependTo @container
       .click () ->
         if fbg.showGraffiti
           $(@).text('Show')
@@ -55,7 +54,6 @@ class fbg.DrawTools
     drawButton = $('<button id="toggleDrawing"></button>')
       .text if fbg.drawing then 'Stop' else 'Draw'
       .css { float: 'left', width: 80 }
-      .prependTo @container
       .click () =>
         if fbg.drawing
           @stageUI.show()
@@ -65,7 +63,7 @@ class fbg.DrawTools
           @stageUI.hide()
           drawButton.text 'Stop'
         @selectors.toggle()
-        reportButton.toggle()
+        utilities.toggle()
         if !fbg.showGraffiti and fbg.drawing is false
           showGraffitiButton.trigger 'click'
         fbg.drawing = !fbg.drawing
@@ -73,7 +71,6 @@ class fbg.DrawTools
 
     reportButton = $('<button id="report">Report</button>')
       .css { float: 'left', width: 80 }
-      .appendTo @container
       .click () =>
         text = 'Does this graffiti contain any:
                 abuse, harrasment or egregiously offensive material?'
@@ -82,7 +79,27 @@ class fbg.DrawTools
           data = { id: fbg.canvas.id }
           $.ajax { type:'POST', url: "#{fbg.host}report", data }
           alert 'It will be evaluated and potentially removed, thanks.'
+    
+    @undoButton = $('<button id="undo" disabled>Undo</button>')
+      .css { float: 'left', width: 80 }
+      .click () => 
+        fbg.canvas.undo()
+        if fbg.canvas.history.length == 0
+          @undoButton.prop "disabled",true
 
+    dropper.prependTo @selectors
+    rangePicker.prependTo @selectors
+
+    @undoButton.appendTo @selectors
+
+    showGraffitiButton.appendTo utilities
+    reportButton.appendTo utilities
+
+    drawButton.appendTo @container
+    @selectors.appendTo @container
+    utilities.appendTo @container
+
+    @container.prependTo $(document.body)
 
     fbg.mouse.addListener 'mousemove', ({currX, currY, onCanvas}) =>
       if @eyeDropping and onCanvas
@@ -96,7 +113,8 @@ class fbg.DrawTools
     @hide()
 
   hide: () ->
-    $('#custom').spectrum("hide");
+    $('#custom').spectrum("hide")
+    @undoButton.prop "disabled", true
     @container.hide()
 
   show: () ->
@@ -110,7 +128,6 @@ class fbg.DrawTools
 
   color: () ->
     t = $('#custom').spectrum 'get'
-    console.log t.getBrightness()
     if t? then t.toRgbString() else "rgba(255, 0, 0, 0)"
 
   size: () ->
@@ -126,7 +143,6 @@ class fbg.DrawTools
       ctx = cursor.getContext '2d'
       color = $('#custom').spectrum('get')
       size = @size()
-      console.log size
       cursor.width = size*2
       cursor.height = size*2
 

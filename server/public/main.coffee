@@ -77,6 +77,15 @@ $ () ->
   fbg.mouse = new EventEmitter()
   fbg.drawTools = new fbg.DrawTools()
   $( window ).resize () -> fbg.canvas?.resize()
+  
+  fbg.mouse.addListener 'mousemove', (options) =>
+    if fbg.drawing and options.onCanvas and options.dragging
+      fbg.canvas?.draw options
+
+  fbg.mouse.addListener 'mousedown', (options) =>
+    console.log 'recieved mousedown', options
+    if fbg.drawing and options.onCanvas
+      fbg.canvas?.saveState()
 
 # console.log 'Starting'
 fbg.cache = new fbg.ImageCache()
