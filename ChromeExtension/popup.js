@@ -6,15 +6,15 @@ document.addEventListener('DOMContentLoaded', function () {
      return false;
     });
   }
-  var imgURL = chrome.extension.getURL("images/throwingMice.png");
+  var imgURL = chrome.extension.getURL("images/howTo.png");
   var img = document.createElement("IMG");
   img.src = imgURL;
-  img.style.position = "absolute";
-  img.style.top = "35px";
-  img.style.left = "180px";
-  var width = Math.floor(370/3);
-  var height = Math.floor(400/3);
-  img.style.width = width+"px";
-  img.style.height = height+"px";
-  document.body.appendChild(img);
+  // img.style.position = "absolute";
+  // img.style.top = "35px";
+  // img.style.left = "180px";
+  // var width = Math.floor(370/3);
+  // var height = Math.floor(400/3);
+  img.style.width = '100%'//width+"px";
+  // img.style.height = height+"px";
+  document.getElementById("photo").appendChild(img);
 });

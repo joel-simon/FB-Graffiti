@@ -3,7 +3,7 @@
 
   "name": "FB Graffiti",
   "description": "Facebook walls are now open to graffiti.",
-  "version": "2.0.10",
+  "version": "2.0.11",
 
   "permissions": [
     "tabs", "https://www.facebook.com/*" ,"storage"
@@ -11,6 +11,7 @@
   "web_accessible_resources": [
     "images/sprayCan.png",
     "images/share.png",
+    "images/howTo.png",
     "jquery.min.js",
     "spectrum.js",
     "event_emitter.min.js",
