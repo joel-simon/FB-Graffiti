@@ -11,4 +11,4 @@ module.exports = (req, res) ->
     if results.rows?.length
       results.rows.forEach (r) ->
         r.time = moment(r.time).fromNow()
-    res.render 'browse.jade', { imgList: results.rows }
+    res.render 'browseReported.jade', { imgList: results.rows }

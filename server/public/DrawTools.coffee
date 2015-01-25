@@ -72,8 +72,10 @@ class fbg.DrawTools
     reportButton = $('<button id="report">Report</button>')
       .css { float: 'left', width: 80 }
       .click () =>
-        text = 'Does this graffiti contain any:
-                abuse, harrasment or egregiously offensive material?'
+        text = 'Does this graffiti contain any: 
+        abuse, harrasment or egregiously offensive material? </br>
+        Remember, you can always remove graffiti from your own photos!
+        For more information visit http://fbgraffiti.com/faq/'
         report = confirm text
         if report
           data = { id: fbg.canvas.id }

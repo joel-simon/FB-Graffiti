@@ -23,6 +23,7 @@ app.use (req, res, next) ->
 app.post '/setImage', requestHandlers.setImage
 app.post '/clear', requestHandlers.clear
 app.post '/report', requestHandlers.report
+app.post '/ignoreReport', requestHandlers.ignoreReport
 app.get '/browse', requestHandlers.browse
 app.get '/browseReported', requestHandlers.browseReported
 app.get '/notifCount', requestHandlers.notifCount

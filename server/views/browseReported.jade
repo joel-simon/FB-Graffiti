@@ -8,39 +8,36 @@ html
     #container.clearfix
       if imgList.length > 0
         each img in imgList
-          .box.photo.col3
+          .box.photo.col4(id= img.id)
             - var url = 'https://www.facebook.com/photo.php?fbid='+img.id
             a(href=url, target="_blank", title="")
               img(src=host+img.id+".png", class="graffiti")
               img(src=img.url)
-            p=img.time
-            button(id=img.id).button Erase graffiti
+            button().button.erase Erase graffiti
+            button().button.disregard Disregard
       else
-        h2 None of your photos have graffiti.
+        h2 Nonthing reported.
   
   //- style(src="style.css")    
   script(src="jquery-1.7.1.min.js")
   script(src="jquery.masonry.min.js")
   script(type='text/javascript').
-    $(function(){
+    $(function() {
 
       var $container = $('#container');
       $container.imagesLoaded( function(){
         console.log('loaded')
-        //- $('#content').masonry('reload');
         $container.masonry({
-          //- columnWidth: 400,
           itemSelector : '.box'
         });
-      }); 
-      $('.button').click(function() {
+      });
+
+      $('.erase').click(function() {
         erase = confirm("Erase this completely? (cannot be undone)")
         if (erase) {
           post = $(this).parent()
-          console.log(post)
-          var url = 'https://fb-graffiti.com/clear'
-          //- var url = 'https://localhost/clear'
-          var data = { id: $(this).attr('id') }
+          var url = location.origin+'/clear'
+          var data = { id: post.attr('id') }
           post.fadeOut("slow", function() {
             $container.masonry( 'remove', post );
             $container.masonry();
@@ -49,6 +46,22 @@ html
           $.post(url, data)
         }
       });
+
+      $('.disregard').click(function() {
+        erase = confirm("Disregard the report?")
+        if (erase) {
+          post = $(this).parent()
+          var url = location.origin+'/ignoreReport'
+          var data = { id: $(this).parent().attr('id') }
+          post.fadeOut("slow", function() {
+            $container.masonry( 'remove', post );
+            $container.masonry();
+          });
+          $.post(url, data)
+        }
+      });
+
+
       $(".photo").mouseenter(function() {
         $(this).find('.graffiti').hide()
       }).mouseleave(function() {
