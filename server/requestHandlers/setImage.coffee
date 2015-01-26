@@ -21,7 +21,7 @@ module.exports = (req, res) ->
 
 newImage = (options) ->
   delta = options.delta
-  console.log 'newImage', delta
+  # console.log 'newImage', delta
   options.type = 'new'
   options.width = delta.width()
   options.height = delta.height()
@@ -29,7 +29,7 @@ newImage = (options) ->
   done options
 
 existingImage = ({ res, path, start, delta, data, url, owner }) ->
-  console.log 'Existing image'
+  # console.log 'Existing image'
   type = 'append'
   oldImg = images data.Body
   oldWidth = oldImg.width()
@@ -55,7 +55,7 @@ done = ({ res, img, path, start, width, height, type, url, owner }) ->
       console.log "ERR:#{JSON.stringify(err)}"
       return res.send 400
 
-    console.log {id, img: !!img, url: !!url, owner}
+    # console.log {id, img: !!img, url: !!url, owner}
 
     q1 =  "UPDATE graffiti set url = $2::text, owner = $3 WHERE id = $1::text;"
     qfu = "INSERT INTO graffiti (id, url, owner) SELECT '#{path.split('.')[0]}', '#{url}', '#{owner}' WHERE NOT EXISTS (select 1 from graffiti where id = $1); "
