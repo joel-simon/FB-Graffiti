@@ -30,6 +30,14 @@ fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
+  owner: () ->
+    url = $('#fbPhotoSnowliftAuthorName').children().data()?.hovercard
+    return null unless url?
+    ownerId = url.match(/id=([0-9]+)/)
+    return null unless ownerId?
+    ownerId[1]
+
+
 
 fbg.isCoverPhoto = (img) ->
   img.parent().parent().attr('id') is 'fbProfileCover'

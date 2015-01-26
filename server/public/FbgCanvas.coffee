@@ -3,7 +3,7 @@ class fbg.FbgCanvas
     @changesMade = false
     @img.addClass 'hasCanvas'
     @stage = $('.stage').first()
-    @owner = fbg.urlParser.owner(fbg.currentPage)
+    @owner = fbg.get.owner() or fbg.urlParser.owner(fbg.currentPage)
     @history = []
 
     console.log 'owner', @owner
