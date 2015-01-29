@@ -73,7 +73,7 @@ class fbg.DrawTools
       .css { float: 'left', width: 80 }
       .click () =>
         text = 'Does this graffiti contain any: 
-        abuse, harrasment or egregiously offensive material? </br>
+        abuse, harrasment or egregiously offensive material?
         Remember, you can always remove graffiti from your own photos!
         For more information visit http://fbgraffiti.com/faq/'
         report = confirm text
