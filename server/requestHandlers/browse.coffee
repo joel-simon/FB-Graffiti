@@ -1,7 +1,8 @@
 db = require '../adapters/db'
 moment = require 'moment'
 module.exports = (req, res) ->
-  user = req.query.u or '%'
+  user = req.query.u # or '%'
+  return res.send 400 unless user?
   n = parseInt(req.query.n) or 25
   k = parseInt(req.query.k) or 0
   q = "select * from (

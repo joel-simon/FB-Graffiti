@@ -25,12 +25,17 @@ app.post '/clear', requestHandlers.clear
 app.post '/report', requestHandlers.report
 app.post '/ignoreReport', requestHandlers.ignoreReport
 
+app.post '/auth', requestHandlers.auth
+
+app.get '/admin', (req, res) -> res.render 'adminLogin.jade'
+
 app.get '/browse', requestHandlers.browse
-app.get '/browseReported', requestHandlers.browseReported
+# app.get '/browseReported', requestHandlers.browseReported
 app.get '/notifCount', requestHandlers.notifCount
 app.get '/stats', requestHandlers.stats
 app.get '/count', requestHandlers.count
 app.get '/', (req, res) -> res.send 200, 'Hello'
+app.get '*', (req, res) -> res.send 404
 
 options =
   key: fs.readFileSync './certs/fbg.key', 'utf8'
