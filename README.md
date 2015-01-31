@@ -4,6 +4,7 @@ FB-Graffiti
 
 
 ### TODO
+* Be able to view the top graffitied pages
 * Code cleanup/Refactor
 * Option to opt out of all Graffiti
 * Prioritize loading profile/cover picture on page load
