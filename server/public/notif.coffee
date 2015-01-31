@@ -95,4 +95,5 @@ $ () ->
     $.get "#{fbg.host}notifCount?id=#{id}&last=#{lastLogin}", (data) ->
       if parseInt(data) > 0
         countText.text data
+        jewel.attr {src: jewelSrcWhite}
         countBox.show()
