@@ -9,9 +9,9 @@ class fbg.DrawTools
     @container = $('<div>')
       .css({ height: 30, margin: 4, position: 'absolute', cursor: 'pointer' })
     
-    @selectors = $('<div>').css 'float', 'left'
+    selectors = $('<div>').css 'float', 'left'
     utilities = $('<div>').css 'float', 'left'
-    @selectors.hide()
+    selectors.hide()
 
     rangePicker = $('<input type="range" id="brushRange" value="40">')
       .css { width: 60, float: 'left' }
@@ -26,10 +26,10 @@ class fbg.DrawTools
         @eyeDropping = !@eyeDropping
         @updateCursor()
 
-    $("<input type='text'/>")
+    colorPicker = $("<input type='text'/>")
       .attr({ id:'custom' })
       .css { float: 'left' }
-      .prependTo @selectors
+      .prependTo selectors
       .spectrum({
         color: "#000"
         change: (c) => @updateCursor()
@@ -62,7 +62,7 @@ class fbg.DrawTools
         else
           @stageUI.hide()
           drawButton.text 'Stop'
-        @selectors.toggle()
+        selectors.toggle()
         utilities.toggle()
         if !fbg.showGraffiti and fbg.drawing is false
           showGraffitiButton.trigger 'click'
@@ -89,16 +89,26 @@ class fbg.DrawTools
         if fbg.canvas.history.length == 0
           @undoButton.prop "disabled",true
 
-    dropper.prependTo @selectors
-    rangePicker.prependTo @selectors
+    downloadButton = $('<a id="downlaod">Download</a>')
+      .css { float: 'left', width: 80 }
+      .click () ->
+        alert 'Tweet with #fbgraffiti or @fb_graffiti!'
+        @href = fbg.canvas.export()
+        @download = fbg.canvas.id+'.png'
 
-    @undoButton.appendTo @selectors
+
+
+    dropper.prependTo selectors
+    rangePicker.prependTo selectors
+
+    @undoButton.appendTo selectors
 
     showGraffitiButton.appendTo utilities
     reportButton.appendTo utilities
+    downloadButton.appendTo utilities
 
     drawButton.appendTo @container
-    @selectors.appendTo @container
+    selectors.appendTo @container
     utilities.appendTo @container
 
     @container.prependTo $(document.body)

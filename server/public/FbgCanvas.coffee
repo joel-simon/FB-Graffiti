@@ -27,7 +27,9 @@ class fbg.FbgCanvas
         @img.addClass 'hasGraffiti'
         @ctx.drawImage @graffitiImage[0], 0, 0, width, height
 
-    @createImgCopy()
+    @createImgCopy ({canvas, ctx}) =>
+      @fbImgCtx = ctx
+      @fbImgCanvas = canvas
 
   saveState: () ->
     @history.push @canvas[0].toDataURL()
@@ -70,8 +72,7 @@ class fbg.FbgCanvas
     @ctx.stroke()
     @ctx.closePath()
 
-  addTo: (div) ->
-    div.prepend @canvas
+  addTo: (div) -> div.prepend @canvas
 
   remove: () ->
     @hide()
@@ -85,10 +86,9 @@ class fbg.FbgCanvas
     @img.removeClass 'hasCanvas'
     delete fbg.canvas
 
-  hide: () ->
-    @canvas.hide()
-  show: () ->
-    @canvas.show()
+  hide: () -> @canvas.hide()
+
+  show: () -> @canvas.show()
 
   postToServer: (img) ->
     return unless @changesMade
@@ -128,21 +128,39 @@ class fbg.FbgCanvas
         if _id[1] == id
           new fbg.FbgImg(img, id, canvasImg)
 
-  createImgCopy: () ->
+  ###
+    Export the two canvas layers into one canvas.
+  ###
+  export: () ->
+    canvas = document.createElement 'canvas'
+    ctx = canvas.getContext "2d"
+    [ w, h ] = [ @img.width(), @img.height() ]
+    canvas.width = w
+    canvas.height = h
+    console.log @fbImgCanvas[0], @canvas[0]
+    ctx.drawImage @fbImgCanvas, 0, 0
+    ctx.drawImage @canvas[0], 0, 0
+    canvas.toDataURL()
+
+
+  # Transforms the background image into a canvas.
+  # This is to get pixel data and use for downloading.
+  createImgCopy: (callback) ->
     src = @img[0].src
     copy = new Image    
     copy.crossOrigin = "Anonymous"
     copy.onload = () =>
-      buffer = document.createElement('canvas');
-      buffer.width = @img.width()
-      buffer.height = @img.height()
-      @ctxCopy = buffer.getContext "2d"
-      @ctxCopy.drawImage copy, 0, 0, @img.width(), @img.height()
+      canvas = document.createElement('canvas')
+      canvas.width = @img.width()
+      canvas.height = @img.height()
+      ctx = canvas.getContext "2d"
+      ctx.drawImage copy, 0, 0, @img.width(), @img.height()
+      callback { canvas, ctx }
     copy.src = src
 
   getColor: (x, y) ->  
     [r, g, b, a] =  @ctx.getImageData(x, y, 1, 1).data
     return "rgb(#{r}, #{g}, #{b})" if a is 255
 
-    [r, g, b, a] = @ctxCopy.getImageData(x, y, 1, 1).data
+    [r, g, b, a] = @fbImgCtx.getImageData(x, y, 1, 1).data
     "rgb(#{r}, #{g}, #{b})"
