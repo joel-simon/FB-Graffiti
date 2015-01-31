@@ -8,6 +8,5 @@ FB-Graffiti
 * Option to opt out of all Graffiti
 * Prioritize loading profile/cover picture on page load
 * Remove image ui in draw mode
-* Share on FB,twitter,instagram option
 * Donation button!!!
 * Shortcut to switch On/Off the plugin (or button on the extension page)
