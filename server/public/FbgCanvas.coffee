@@ -6,8 +6,6 @@ class fbg.FbgCanvas
     @owner = fbg.get.owner() or fbg.urlParser.owner(fbg.currentPage)
     @history = []
 
-    console.log 'owner', @owner
-
     top = "#{(@stage.height() - @img.height())//2}px"
     left = "#{(@stage.width() - @img.width())//2}px"
     width = @img.width()
@@ -39,13 +37,11 @@ class fbg.FbgCanvas
     restore_state = @history.pop()
     return unless restore_state?
     img = new Image
-    console.log 'restoring to', restore_state
     w = @canvas[0].width
     h = @canvas[0].height
     if @history.length == 0
       @changesMade = false
     img.onload = () =>
-      console.log 'loaded!'
       @ctx.clearRect 0, 0, w, h
       @ctx.drawImage img, 0, 0, w, h
     img.src = restore_state

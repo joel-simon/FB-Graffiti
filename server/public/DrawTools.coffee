@@ -109,6 +109,7 @@ class fbg.DrawTools
         @setColor c
 
     fbg.mouse.addListener 'mousedown', ({onCanvas}) =>
+      console.log onCanvas, @eyeDropping
       if @eyeDropping and onCanvas
         dropper.trigger 'click'
     

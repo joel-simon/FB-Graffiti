@@ -28,7 +28,6 @@ onMouse = (eventType, e) ->
     fbg.mouse.emitEvent 'mousedown', [options]
 
   if dragging && eventType == 'up' || dragging && eventType == "out"
-    console.log 'emitEvent mouseup'
     fbg.mouse.emitEvent 'mouseup', [ { dragging } ]
     dragging = false
 
