@@ -17,10 +17,13 @@ style = """
 
 .page img {
   float: right;
+  margin-right: 10px;
 }
 
 .page p {
   color: #3b5998;
+  font-weight: bold;
+  margin-left: 20px;
   float: left;
 }
 
