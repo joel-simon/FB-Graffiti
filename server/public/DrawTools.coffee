@@ -4,7 +4,7 @@ class fbg.DrawTools
     @selectorOpen = false
     @eyeDropping = false
 
-    @stageUI = $('.snowliftPager,.stageActions')
+    # @stageUI = $('.snowliftPager,.stageActions')
 
     @container = $('<div>')
       .css({ height: 50, margin: 4, position: 'absolute', cursor: 'pointer' })
@@ -56,14 +56,15 @@ class fbg.DrawTools
       .css { float: 'left', width: 80 }
       .click () =>
         if fbg.drawing
-          @stageUI.show()
+          fbg.get.faceBoxes().show()
           drawButton.text 'Draw'
           fbg.canvas.postToServer()
         else
-          @stageUI.hide()
+          fbg.get.faceBoxes().hide()
           drawButton.text 'Stop'
         selectors.toggle()
         utilities.toggle()
+
         if !fbg.showGraffiti and fbg.drawing is false
           showGraffitiButton.trigger 'click'
         fbg.drawing = !fbg.drawing

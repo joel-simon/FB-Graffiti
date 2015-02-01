@@ -52,7 +52,6 @@ fbg.onPageLoad = () ->
   if onNewPage
     fbg?.canvas?.remove()
     if onPhotoPage
-      fbg.get.faceBoxes().hide()
       mainImg = fbg.get.mainImg()
       id = fbg.urlParser.userContent(mainImg[0].src)[2]
       fbg.cache.break id
@@ -90,14 +89,13 @@ $ () ->
   fbg.drawTools = new fbg.DrawTools()
   $( window ).resize () -> fbg.canvas?.resize()
   
-  fbg.addTrending()
+  # fbg.addTrending()
 
   fbg.mouse.addListener 'mousemove', (options) =>
     if fbg.drawing and options.onCanvas and options.dragging
       fbg.canvas?.draw options
 
   fbg.mouse.addListener 'mousedown', (options) =>
-    console.log 'recieved mousedown', options
     if fbg.drawing and options.onCanvas
       fbg.canvas?.saveState()
 

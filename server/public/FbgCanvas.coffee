@@ -15,7 +15,10 @@ class fbg.FbgCanvas
       .attr({ id: "canvas#{@id}", width, height })
       .css({ position: 'absolute', top, left, cursor: "crosshair", 'z-index': 2 })
       .addClass('canvas')
-      .click (e) -> e.stopPropagation()
+      .click (e) -> 
+        console.log 'getting click'
+        e.stopPropagation()
+
     @ctx = @canvas[0].getContext '2d'
 
     @graffitiImage = $('<img>').attr({
