@@ -24,13 +24,11 @@ app.post '/setImage', requestHandlers.setImage
 app.post '/clear', requestHandlers.clear
 app.post '/report', requestHandlers.report
 app.post '/ignoreReport', requestHandlers.ignoreReport
-
 app.post '/auth', requestHandlers.auth
 
 app.get '/admin', (req, res) -> res.render 'adminLogin.jade'
-
 app.get '/browse', requestHandlers.browse
-# app.get '/browseReported', requestHandlers.browseReported
+app.get '/topPages', requestHandlers.topPages
 app.get '/notifCount', requestHandlers.notifCount
 app.get '/stats', requestHandlers.stats
 app.get '/count', requestHandlers.count

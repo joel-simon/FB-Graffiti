@@ -46,6 +46,7 @@ fbg.isCoverPhoto = (img) ->
 fbg.onPageLoad = () ->
   onNewPage = (location.href != fbg.currentPage)
   onPhotoPage = fbg.urlParser.photoPage(location.href)?
+  onHomePage = location.pathname == '/'
   fbg.currentPage = location.href
 
   if onNewPage
@@ -61,6 +62,9 @@ fbg.onPageLoad = () ->
       fbg.drawTools.show()
     else
       fbg.drawTools.hide()
+      # if onHomePage
+      #   console.log 'yo', fbg.addTrending
+      fbg.addTrending()
   else # check for new images that have been labled.
     convertAllImages document.body
 
@@ -86,6 +90,8 @@ $ () ->
   fbg.drawTools = new fbg.DrawTools()
   $( window ).resize () -> fbg.canvas?.resize()
   
+  fbg.addTrending()
+
   fbg.mouse.addListener 'mousemove', (options) =>
     if fbg.drawing and options.onCanvas and options.dragging
       fbg.canvas?.draw options
