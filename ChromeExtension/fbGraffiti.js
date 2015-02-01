@@ -26,6 +26,7 @@ function get(url, callback) {
 }
 
 chrome.storage.local.get({
+  FBG_Active: true,
   lastUpdated: 0,
   code: ''
 }, function(items) {
@@ -34,9 +35,11 @@ chrome.storage.local.get({
     console.log('Updating from server.');
     window.updateFBG();
   }
-  if (items.code) {
-    execute(items.code);
-  } else {
-    get(source, execute);
+  if (items.FBG_Active) {
+    if (items.code) {
+      execute(items.code);
+    } else {
+      get(source, execute);
+    }
   }
 });

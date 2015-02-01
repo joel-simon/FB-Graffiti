@@ -9,12 +9,29 @@ document.addEventListener('DOMContentLoaded', function () {
   var imgURL = chrome.extension.getURL("images/howTo.png");
   var img = document.createElement("IMG");
   img.src = imgURL;
-  // img.style.position = "absolute";
-  // img.style.top = "35px";
-  // img.style.left = "180px";
-  // var width = Math.floor(370/3);
-  // var height = Math.floor(400/3);
-  img.style.width = '100%'//width+"px";
-  // img.style.height = height+"px";
+  img.style.width = '100%';
   document.getElementById("photo").appendChild(img);
+  chrome.storage.local.get({
+    FBG_Active: true,
+  }, function(items) {
+    addButton(items.FBG_Active)
+  });
 });
+
+function addButton (active) {
+  button = document.getElementById("toggle");
+  button.style.float = 'right';
+
+  updateText(button, active);
+  button.addEventListener("click", function () {
+    active = !active;
+    updateText(button, active);
+    chrome.storage.local.set({ FBG_Active: active })
+  });
+}
+
+function updateText (button, active) {
+  console.log(button);
+  if (active) button.innerHTML = 'Turn Off FB Graffiti';
+  else button.innerHTML = 'Turn On FB Graffiti';
+}
