@@ -14,7 +14,8 @@
     "moment": "~2.8.4",
     "moment-timezone": "^0.3.0",
     "node-minify": "~1.0.1",
-    "pg": "3.1.0"
+    "pg": "3.1.0",
+    "request": "^2.51.0"
   },
   "devDependencies": {},
   "scripts": {

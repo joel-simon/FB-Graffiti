@@ -11,11 +11,11 @@ module.exports = (req, res) ->
       FROM events, graffiti
       WHERE
         events.id = graffiti.id
-        AND events.post_time > (NOW() - INTERVAL '7 DAY')
+        AND events.post_time > (NOW() - INTERVAL '2 DAY')
         AND owner != ''
       GROUP BY graffiti.owner
       ORDER BY count desc
-      LIMIT 10;"
+      LIMIT 5;"
 
   getFBInfo = ({ count, id }, cb) ->
     return cb null, memCache[id] if memCache[id]?

@@ -7,6 +7,23 @@ License: MIT
 
 style = """
 
+#container {
+  width: 100%;
+}
+
+.page {
+  height: 55px;
+}
+
+.page img {
+  float: right;
+}
+
+.page p {
+  color: #3b5998;
+  float: left;
+}
+
 #dropper {
     border-style: solid;
     width: 32px;

@@ -7,7 +7,7 @@ class fbg.DrawTools
     @stageUI = $('.snowliftPager,.stageActions')
 
     @container = $('<div>')
-      .css({ height: 30, margin: 4, position: 'absolute', cursor: 'pointer' })
+      .css({ height: 50, margin: 4, position: 'absolute', cursor: 'pointer' })
     
     selectors = $('<div>').css 'float', 'left'
     utilities = $('<div>').css 'float', 'left'
@@ -96,6 +96,18 @@ class fbg.DrawTools
         @href = fbg.canvas.export()
         @download = fbg.canvas.id+'.png'
 
+    # donate = $('<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    #             <input type="hidden" name="cmd" value="_s-xclick">
+    #             <input type="hidden" name="hosted_button_id" value="RYVAZPEYTZ7W8">
+    #             Help Support FB GRaffiti!</form>')
+    #           .css({
+    #             'margin-left': 'auto'
+    #             'margin-right': 'auto'
+    #           })
+              #<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+              #<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+
+
 
 
     dropper.prependTo selectors
@@ -110,6 +122,7 @@ class fbg.DrawTools
     drawButton.appendTo @container
     selectors.appendTo @container
     utilities.appendTo @container
+    # donate.appendTo @container
 
     @container.prependTo $(document.body)
 

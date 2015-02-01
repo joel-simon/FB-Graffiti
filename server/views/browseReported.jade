@@ -8,7 +8,7 @@ html
     #container.clearfix
       if imgList.length > 0
         each img in imgList
-          .box.photo.col4(id= img.id)
+          .box.photo.col5(id= img.id)
             - var url = 'https://www.facebook.com/photo.php?fbid='+img.id
             a(href=url, target="_blank", title="")
               img(src=host+img.id+".png", class="graffiti")
