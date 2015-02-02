@@ -1,4 +1,4 @@
-$ () ->
+fbg.createNotif = () ->
   data = {}
   parent = $('.notifCentered')
   
@@ -57,9 +57,14 @@ $ () ->
     'border-top-style': 'none'
   }
 
-  myPhotos = $('<iframe />', {
-    src: fbg.host+'browse?u='+fbg.urlParser.myId()
-  }).css(iframeCss).appendTo flyout
+  haveIframe = false
+  createIframe = () ->
+    return if haveIframe
+    console.log 'here', fbg.host, fbg.urlParser.myId()
+    myPhotos = $('<iframe />', {
+      src: fbg.host+'browse?u='+fbg.urlParser.myId()
+    }).css(iframeCss).appendTo flyout
+    haveIframe = true
 
   jewelButton.append flyout
   parent.prepend jewelButton
@@ -77,6 +82,7 @@ $ () ->
       jewel.attr {src: jewelSrc}
       flyout.hide()  
     else
+      createIframe()
       jewel.attr {src: jewelSrcWhite}
       flyout.show()
     visible = !visible

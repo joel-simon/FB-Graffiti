@@ -7,8 +7,8 @@ get = (cb) ->
   fs.readdir __dirname, (err,files) ->
     return cb err if err?
     files = files.filter (f) ->
-      f != 'index.coffee' and f.match(/.+\.(coffee|js)/g)?
-
+      f != 'index.coffee' and f!= 'main.coffee' and f.match(/.+\.(coffee|js)/g)?
+    files.push 'main.coffee'
     async.mapSeries files, loadFile, (err, files) ->
       return cb err if err?
       cb null, files.join ''

@@ -30,6 +30,7 @@ fbg.get =
   mainImg : () -> $('.spotlight')
   faceBoxes : () -> $('.faceBox')
   photoUi : () -> $('.stageActions, .faceBox, .highlightPager')
+  profileAndCover: () -> $('.profilePic, .coverPhotoImg')
   owner: () ->
     url = $('#fbPhotoSnowliftAuthorName').children().data()?.hovercard
     return null unless url?
@@ -72,25 +73,28 @@ trackChanges = () ->
   $(document).on "DOMSubtreeModified", domCoolTest.warm
 
 convertAllImages = (base) ->
-  $(base).find('img').not('.hasGraffiti').not('.spotlight').each () ->
-    # return if fbg.urlParser.stupidCroppedPhoto(@src)?
+  addGraffiti = () ->
     id = fbg.urlParser.id @src
     img = $(@)
-    # return if fbg.isCoverPhoto img
     return unless id?
     id = id[1]
     url = fbg.cache.idToUrl id
     return if url is null
     new fbg.FbgImg(img, id, url)
 
+  fbg.get.profileAndCover().each addGraffiti
+  setTimeout (() ->
+    $(base).find('img').not('.hasGraffiti').not('.spotlight').each addGraffiti),
+    100
+
+
 $ () ->
   # console.log 'Page loaded'
   fbg.mouse = new EventEmitter()
   fbg.drawTools = new fbg.DrawTools()
   $( window ).resize () -> fbg.canvas?.resize()
-  
-  # fbg.addTrending()
-
+  fbg.addTrending()
+  fbg.createNotif()
   fbg.mouse.addListener 'mousemove', (options) =>
     if fbg.drawing and options.onCanvas and options.dragging
       fbg.canvas?.draw options
