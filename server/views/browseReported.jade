@@ -27,6 +27,13 @@ html
       var $container = $('#container');
       $container.imagesLoaded( function(){
         console.log('loaded')
+
+        $('.photo').each(function(){
+          img = $(this).find('img').not('.graffiti')
+          $(this).width(img.width())
+          $(this).height(img.height())
+        })
+
         $container.masonry({
           itemSelector : '.box'
         });
