@@ -72,6 +72,7 @@ fbg.onPageLoad = () ->
 trackChanges = () ->
   domCoolTest = new fbg.DomCoolTest fbg.onPageLoad, 300
   $(document).on "DOMSubtreeModified", domCoolTest.warm
+  $(window).on "onhashchange", domCoolTest.warm
 
 convertAllImages = (base) ->
   addGraffiti = () ->
@@ -90,7 +91,6 @@ convertAllImages = (base) ->
 
 
 $ () ->
-  # console.log 'Page loaded'
   fbg.mouse = new EventEmitter()
   fbg.drawTools = new fbg.DrawTools()
   $( window ).resize () -> fbg.canvas?.resize()

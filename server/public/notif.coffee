@@ -1,7 +1,7 @@
 fbg.createNotif = () ->
   data = {}
-  parent = $('.notifCentered')
-  
+  parent = $('#fbRequestsJewel').parent()
+
   jewelSrc = fbg.imgHost+'sprayIcon.png'
   jewelSrcWhite = fbg.imgHost+'sprayIconWhite.png'
   visible = false

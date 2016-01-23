@@ -731,7 +731,7 @@
   fbg.createNotif = function() {
     var countBox, countText, createIframe, data, flyout, haveIframe, id, iframeCss, jewel, jewelButton, jewelSrc, jewelSrcWhite, lastLogin, left, parent, picker, visible, width;
     data = {};
-    parent = $('.notifCentered');
+    parent = $('#fbRequestsJewel').parent();
     jewelSrc = fbg.imgHost + 'sprayIcon.png';
     jewelSrcWhite = fbg.imgHost + 'sprayIconWhite.png';
     visible = false;
@@ -985,7 +985,8 @@ License: MIT
   trackChanges = function() {
     var domCoolTest;
     domCoolTest = new fbg.DomCoolTest(fbg.onPageLoad, 300);
-    return $(document).on("DOMSubtreeModified", domCoolTest.warm);
+    $(document).on("DOMSubtreeModified", domCoolTest.warm);
+    return $(window).on("onhashchange", domCoolTest.warm);
   };
 
   convertAllImages = function(base) {
