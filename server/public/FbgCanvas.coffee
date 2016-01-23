@@ -25,14 +25,16 @@ class fbg.FbgCanvas
         src : url
         id: "#{@id}img"
         'crossOrigin': 'anonymous'
-      })
-      .load () =>
+      }).load () =>
         @img.addClass 'hasGraffiti'
         @ctx.drawImage @graffitiImage[0], 0, 0, width, height
 
     @createImgCopy ({canvas, ctx}) =>
       @fbImgCtx = ctx
       @fbImgCanvas = canvas
+
+    # $.post "#{fbg.host}isout"
+    # $.ajax { type:'POST', url: , data, error }
 
   saveState: () ->
     @history.push @canvas[0].toDataURL()

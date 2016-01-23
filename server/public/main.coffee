@@ -1,5 +1,6 @@
 fbg.host ?= 'https://fb-graffiti.com/'
 fbg.imgHost = 'http://fbgraffiti.com/extensionimages/'
+fbg.topPagesUrl = 'https://s3.amazonaws.com/fbgsource/topPages.html'
 fbg.drawing = false
 fbg.showGraffiti = true
 

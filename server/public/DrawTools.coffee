@@ -91,39 +91,43 @@ class fbg.DrawTools
           @undoButton.prop "disabled",true
 
     downloadButton = $('<a id="downlaod">Download</a>')
-      .css { float: 'left', width: 80 }
+      .css { float: 'left', width: 80, 'margin-top': 2 }
       .click () ->
         alert 'Tweet with #fbgraffiti or @fb_graffiti!'
         @href = fbg.canvas.export()
         @download = fbg.canvas.id+'.png'
 
-    # donate = $('<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-    #             <input type="hidden" name="cmd" value="_s-xclick">
-    #             <input type="hidden" name="hosted_button_id" value="RYVAZPEYTZ7W8">
-    #             Help Support FB GRaffiti!</form>')
-    #           .css({
-    #             'margin-left': 'auto'
-    #             'margin-right': 'auto'
-    #           })
-              #<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-              #<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+    tip = $('<p></p>').css { position: 'absolute' }
+    items = [
+      'Hide graffiti to tag photos',
+      'Turn the entire extension on/off from the chrome extension button'
+    ]
+    text = 'Tip: '+items[Math.floor(Math.random()*items.length)]
+    tip.text(text);   
+    donate = $('<a target="_blank" href="http://www.fbgraffiti.com/support">SUPPORT</a>').css {
+      position: 'absolute'
+      top: 25
+      left: 140
+    }
 
 
 
 
     dropper.prependTo selectors
     rangePicker.prependTo selectors
-
     @undoButton.appendTo selectors
 
     showGraffitiButton.appendTo utilities
     reportButton.appendTo utilities
     downloadButton.appendTo utilities
+    # donate.appendTo utilities
+    
 
+    # tip.appendTo @container
     drawButton.appendTo @container
     selectors.appendTo @container
     utilities.appendTo @container
-    # donate.appendTo @container
+    
 
     @container.prependTo $(document.body)
 
@@ -146,7 +150,7 @@ class fbg.DrawTools
     @container.hide()
 
   show: () ->
-    $('.rhcHeader').css('height', 40).prepend @container
+    $('.rhcHeader').css('height', 50).prepend @container
     $('#toggleG').text('Hide graffiti')
     @updateCursor()
     @container.show()

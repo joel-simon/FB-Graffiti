@@ -29,7 +29,7 @@ html
         console.log('loaded')
 
         $('.photo').each(function(){
-          img = $(this).find('img').not('.graffiti')
+          img = $(this).find('img.graffiti')
           $(this).width(img.width())
           $(this).height(img.height())
         })

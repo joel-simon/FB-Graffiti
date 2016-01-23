@@ -5,6 +5,7 @@ html
     link(rel='stylesheet', href="/style.css")
   body
     - var host="https://s3.amazonaws.com/facebookGraffiti/"
+    button(id="optOut") Block My Account From Graffiti
     #container.clearfix
       if imgList.length > 0
         each img in imgList
@@ -14,7 +15,7 @@ html
               img(src=host+img.id+".png", class="graffiti")
               img(src=img.url)
             p=img.time
-            button(id=img.id).button Erase graffiti
+            button(id=img.id).erase Erase graffiti
       else
         h2 None of your photos have graffiti.
   
@@ -22,6 +23,7 @@ html
   script(src="jquery-1.7.1.min.js")
   script(src="jquery.masonry.min.js")
   script(type='text/javascript').
+    var user = "#{user}"
     $(function(){
 
       var $container = $('#container');
@@ -32,14 +34,26 @@ html
           //- columnWidth: 400,
           itemSelector : '.box'
         });
-      }); 
-      $('.button').click(function() {
+      });
+      $('#optOut').click(function() {
+        optOut = confirm("This will erase all graffiti on your images permanently. Are you sure?")
+        if (optOut) {
+          //- var url = 'https://fb-graffiti.com/clear'
+          var url = 'https://localhost/optOut'
+          $.post(url, { user: user }, function() {
+            $('.box').fadeOut("slow", function() {
+            $container.masonry( 'remove', $('.box') );
+              $container.masonry();
+              alert('All graffiti has been removed.');
+            });
+          });
+        }
+      });
+      $('.erase').click(function() {
         erase = confirm("Erase this completely? (cannot be undone)")
         if (erase) {
           post = $(this).parent()
-          console.log(post)
           var url = 'https://fb-graffiti.com/clear'
-          //- var url = 'https://localhost/clear'
           var data = { id: $(this).attr('id') }
           post.fadeOut("slow", function() {
             $container.masonry( 'remove', post );

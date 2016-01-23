@@ -1,16 +1,10 @@
 html
   head
     title Most Graffitied Pages in Last Week
-    //- link(rel='stylesheet', href="/style.css")
   body
     #container
       each page, i in pages
         .page
           a(href=page.link, title="")
-            p=page.name
+            p(style="max-width:170px")=page.name
             img(src=page.picture.data.url).profile.hasGraffiti
-            
-  script(type='text/javascript').
-    //- $(function(){
-
-    //- });

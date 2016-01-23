@@ -22,6 +22,7 @@ app.use (req, res, next) ->
 
 app.post '/setImage', requestHandlers.setImage
 app.post '/clear', requestHandlers.clear
+app.post '/optOut', requestHandlers.optOut
 app.post '/report', requestHandlers.report
 app.post '/ignoreReport', requestHandlers.ignoreReport
 app.post '/auth', requestHandlers.auth

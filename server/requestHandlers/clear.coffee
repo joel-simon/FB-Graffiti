@@ -9,8 +9,8 @@ module.exports = (req, res) ->
     Bucket: 'facebookGraffiti'
     Key: id+'.png'
   s3.deleteObject params, (err) ->
-    return res 400 if err?
+    return res.status(500).send('Err') if err?
     db.query "DELETE FROM graffiti WHERE id = $1::text", [id], (err) ->
-      return res 400 if err?
+      return res.status(500).send('Err') if err?
       console.log "Deleted #{id}."
       res.send 200
